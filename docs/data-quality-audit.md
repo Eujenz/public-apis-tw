@@ -32,17 +32,17 @@
 
 ---
 
-### 1.4 最終 20 筆資料集之狀態分佈 (Final 20 Datasets Distribution)
-完成上述修正、降級與替換後，目前版本庫內 20 筆 API 的審查與驗證狀態分佈如下：
+### 1.4 目前 45 筆資料集之狀態分佈 (Current 45 Datasets Distribution)
+完成大型平台（TDX、CWA、MOENV、WRA）垂直領域細粒度拆分後，目前版本庫內 45 筆 API 的審查與驗證狀態分佈如下：
 
 - **審查狀態分佈 (`review_status`)**：
-  - `verified`（已審核通過，列入正式目錄主表）：**16 筆**
+  - `verified`（已審核通過，列入正式目錄主表）：**41 筆**
   - `needs_review`（待官方或維護者進一步查核，列入附錄）：**2 筆** (`cdc-surveillance-opendata`, `nhi-medical-institutions`)
   - `candidate`（候選待審項目，列入附錄）：**2 筆** (`dgpa-work-class-cancel`, `tw-air-quality-history`)
 
 - **技術查核等級分佈 (`verification_level`)**：
-  - `endpoint_tested`（於 2026-10-13 以安全 HTTP GET/OPTIONS 請求實測端點與 CORS 通過，且均填有 `last_endpoint_tested_at`）：**6 筆** (`moa-agri-trans`, `moea-gcis-company`, `nlsc-map-api`, `taipei-opendata-portal`, `taipower-power-status`, `twse-openapi`)
-  - `docs_reviewed`（依官方技術文件核實）：**12 筆** (`cdc-surveillance-opendata`, `chunghwa-post-zip33`, `cwa-opendata`, `moenv-air-quality`, `mof-einvoice`, `ncdr-cap-disaster`, `nhi-medical-institutions`, `tbroc-tourism`, `tdx-transportation`, `tgos-geocoder`, `tpex-openapi`, `wra-water-resources`)
+  - `endpoint_tested`（實測端點通過）：**13 筆** (`moa-agri-trans`, `moea-gcis-company`, `nlsc-map-api`, `taipei-opendata-portal`, `taipower-power-status`, `twse-openapi`, `nhi-er-congestion`, `lass-airbox`, `tpml-seat-status`, `kcg-waste-truck-gps`, `judicial-open-data`, `twinkle-hub-mcp`, `tfda-open-data`)
+  - `docs_reviewed`（依官方技術文件核實）：**30 筆** (包含 TDX、CWA、MOENV、WRA 等各垂直子領域 API 與原收錄條目)
   - `none`（未經查核，候選項目）：**2 筆** (`dgpa-work-class-cancel`, `tw-air-quality-history`)
 
 ---
@@ -302,3 +302,80 @@
   - 原即為 `candidate` 項目，歷史資料多為大量壓縮檔下載，API 分頁查詢規模有限，待完成進一步驗證。
 - **整體評級**: `PASS` (符合 candidate 規格定義)
 - **實測紀錄**: 保持候選待審狀態。
+
+---
+
+### 21. nhi-er-congestion (自 mini-taiwan-pulse 反推收錄)
+- **名稱**: 健保署重度級急救責任醫院急診即時訊息 API
+- **官方文件**: https://info.nhi.gov.tw/INAE4000/INAE4001S01
+- **驗證來源**: 衛生福利部中央健康保險署
+- **實地檢驗發現**:
+  - 提供 RESTful JSON 介面，端點 SQL0001 回傳縣市代碼清單，SQL0002 接受 POST 查詢各醫院即時急診等待掛號、看診、推床與加護病房數。
+  - 端點實測通過 (HTTP 200)，每整點更新全台快照，設定為 `endpoint_tested`。
+- **整體評級**: `PASS`
+
+---
+
+### 22. lass-airbox (自 mini-taiwan-pulse 反推收錄)
+- **名稱**: LASS AirBox 微型空氣品質感測器開源 API
+- **官方文件**: https://pm25.lass-net.org/
+- **驗證來源**: LASS (Location Aware Sensing System) 開源社群
+- **實地檢驗發現**:
+  - 每 5 分鐘提供全台數百個民間活躍 AirBox 感測點之 PM2.5、PM10、溫濕度 JSON 快照。
+  - 端點實測通過 (HTTP 200, 460+ 站點)，設定為 `endpoint_tested`。
+- **整體評級**: `PASS`
+
+---
+
+### 23. tpml-seat-status (自 mini-taiwan-pulse 反推收錄)
+- **名稱**: 台北市立圖書館自修室座位即時狀態 API
+- **官方文件**: https://seat.tpml.edu.tw
+- **驗證來源**: 台北市立圖書館
+- **實地檢驗發現**:
+  - 提供 REST JSON 端點查詢總館與各主要分館自修室之即時在館席位、剩餘座位與總座位數。
+  - 端點實測通過 (HTTP 200, 29 個自修室分區)，設定為 `endpoint_tested`。
+- **整體評級**: `PASS`
+
+---
+
+### 24. kcg-waste-truck-gps (自 mini-taiwan-pulse 反推收錄)
+- **名稱**: 高雄市垃圾車即時動態定位 API
+- **官方文件**: https://openapi.kcg.gov.tw/
+- **驗證來源**: 高雄市政府環境保護局
+- **實地檢驗發現**:
+  - 提供全高雄市垃圾清運車輛即時 GPS 定位座標、車牌、路線編號與即時速度之 JSON 介面。
+  - 端點實測通過 (HTTP 200)，設定為 `endpoint_tested`。
+- **整體評級**: `PASS`
+
+---
+
+### 25. judicial-open-data (自 Taiwan.md 策展反推收錄)
+- **名稱**: 司法院資料開放平臺 API
+- **官方文件**: https://opendata.judicial.gov.tw/DevelopmentGuide
+- **驗證來源**: 司法院
+- **實地檢驗發現**:
+  - 司法院官方正式 RESTful API，提供 `/data/api/rest/categories` 與 `/categories/{no}/resources` 查詢全台法院裁判書、憲法裁判與司法統計。
+  - 端點實測通過 (HTTP 200)，回傳完整分類與資料集清單，設定為 `endpoint_tested`。
+- **整體評級**: `PASS`
+
+---
+
+### 26. twinkle-hub-mcp (自 Taiwan.md 策展反推收錄)
+- **名稱**: Twinkle Hub 台灣開放資料 MCP 閘道 API
+- **官方文件**: https://hub.twinkleai.tw/
+- **驗證來源**: Twinkle AI
+- **實地檢驗發現**:
+  - Taiwan.md 評估之指標性 AI 友善開放資料 MCP 服務，封裝 49,000+ 個開放資料集與專利、國考題庫、裁判書等五大垂直語料庫為統一 MCP 查詢端點。
+  - 端點與文件連線實測通過 (HTTP 200)，設定為 `endpoint_tested`。
+- **整體評級**: `PASS`
+
+---
+
+### 27. tfda-open-data (自 Taiwan.md 策展反推收錄)
+- **名稱**: 食品藥物開放資料平臺 OpenAPI
+- **官方文件**: https://data.fda.gov.tw/
+- **驗證來源**: 衛生福利部食品藥物管理署
+- **實地檢驗發現**:
+  - 提供 OpenAPI 3.0 標準規範，涵蓋西藥與中藥藥品許可證、化妝品、醫療器材與食品營養成分資料庫之 27 個端點。
+  - 底層 OpenAPI 規格檔案以 Crawlee 自動捕獲並完成端點實測 (HTTP 200)，設定為 `endpoint_tested`。
+- **整體評級**: `PASS`

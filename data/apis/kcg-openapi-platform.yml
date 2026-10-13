@@ -1,0 +1,25 @@
+id: kcg-openapi-platform
+name_zh: 高雄市政府資料開放 OpenAPI 平台
+name_en: Kaohsiung City Government OpenAPI Platform
+description_zh: 高雄市政府資料開放平台提供之標準 OpenAPI/RESTful 查詢服務，提供市府各機關公共設施、公政通訊與地方治理開放端點。
+category: Government & Public Services
+provider: 高雄市政府
+provider_type: official
+docs_url: https://openapi.kcg.gov.tw/
+website_url: https://data.gov.tw/dataset/166361
+base_url: https://openapi.kcg.gov.tw/Api/Service/Get
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/166361
+- https://openapi.kcg.gov.tw/
+notes: 由 data.gov.tw 批次掃描發現之地方政府標準 OpenAPI 平台。

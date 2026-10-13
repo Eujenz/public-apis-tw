@@ -1,0 +1,25 @@
+id: moi-ris-opendata
+name_zh: 內政部戶政司戶政資訊開放資料 API
+name_en: Department of Household Registration Open Data API
+description_zh: 內政部戶政司提供之 RESTful Datastore 程式化查詢介面，提供全國各級行政區人口統計、各鄉鎮市區人口密度、路名資料與各村里統計指標。
+category: Government & Public Services
+provider: 內政部戶政司
+provider_type: official
+docs_url: https://www.ris.gov.tw/rs-opendata/api/v1/datastore/ODRP049/107
+website_url: https://data.gov.tw/dataset/35321
+base_url: https://www.ris.gov.tw/rs-opendata/api/v1/datastore
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/35321
+- https://data.gov.tw/dataset/8410
+notes: 由 data.gov.tw 批次掃描 JSON/API 標籤發現，支援全國人口統計與路名即時查詢。

@@ -1,0 +1,24 @@
+id: mol-foreign-worker-application-stats
+name_zh: 雇主聘僱外國人線上申辦量統計 API
+name_en: Online Application Statistics for Employers Hiring Foreign Workers API
+description_zh: 勞動部勞動力發展署提供之雇主聘僱外國人申請案件網路線上申辦量月度統計 RESTful 查詢介面。
+category: Government & Public Services
+provider: 勞動部勞動力發展署
+provider_type: official
+docs_url: https://data.gov.tw/dataset/148753
+website_url: https://data.gov.tw/dataset/148753
+base_url: https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-030198-Vnf
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/148753
+notes: 由 data.gov.tw 批次掃描 WEBSERVICES 自動產生之候選項目。

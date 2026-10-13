@@ -1,0 +1,24 @@
+id: mol-occupational-disaster-info
+name_zh: 重大職業災害公開資訊 API
+name_en: Major Occupational Disasters Public Information API
+description_zh: 勞動部職業安全衛生署提供之重大職業災害公開資料 RESTful API，提供發生日期、事業單位名稱、業別與災害概況等公開資訊。
+category: Government & Public Services
+provider: 勞動部職業安全衛生署
+provider_type: official
+docs_url: https://data.gov.tw/dataset/126835
+website_url: https://data.gov.tw/dataset/126835
+base_url: https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-030238-Ecz
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/126835
+notes: '由 data.gov.tw 批次掃描 WEBSERVICES (nid: 126835) 自動產生之候選項目。'

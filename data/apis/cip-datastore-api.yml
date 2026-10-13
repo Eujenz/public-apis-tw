@@ -1,0 +1,25 @@
+id: cip-datastore-api
+name_zh: 原住民族委員會開放資料 Datastore API
+name_en: Council of Indigenous Peoples Open Data Datastore API
+description_zh: 原住民族委員會提供之開放資料 Datastore 程式化介面，提供原住民族部落位置地理資訊、文化就業調查統計及各項政策分析資料查詢。
+category: Government & Public Services
+provider: 原住民族委員會
+provider_type: official
+docs_url: https://data.cip.gov.tw/
+website_url: https://data.gov.tw/dataset/178594
+base_url: https://data.cip.gov.tw/API/v1/dump/datastore
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/178594
+- https://data.cip.gov.tw/
+notes: 由 data.gov.tw 批次掃描發現之原民會專屬 Datastore 端點。

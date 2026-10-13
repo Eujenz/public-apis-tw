@@ -1,0 +1,24 @@
+id: mol-ttqs-accredited-units
+name_zh: 台灣訓練品質系統 (TTQS) 效期內單位名單 API
+name_en: Taiwan TrainQuali System (TTQS) Valid Accredited Units API
+description_zh: 勞動部勞動力發展署提供之 TTQS 效期內受評單位清冊 RESTful 端點，包含單位名稱、通過版別、等級與有效期限。
+category: Education & Research
+provider: 勞動部勞動力發展署
+provider_type: official
+docs_url: https://data.gov.tw/dataset/41723
+website_url: https://data.gov.tw/dataset/41723
+base_url: https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-030117-rz9
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/41723
+notes: '由 data.gov.tw 批次掃描 WEBSERVICES (nid: 41723) 自動產生之候選項目。'

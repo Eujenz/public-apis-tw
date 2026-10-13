@@ -1,0 +1,25 @@
+id: tainan-soa-api
+name_zh: 臺南市政府開放資料服務導向 (SOA) API
+name_en: Tainan City SOA Open Data API
+description_zh: 臺南市政府開放資料平臺建置之面向服務架構 (SOA) REST API，提供市政各機關業務資料、醫療院所清冊、不動產實價登錄及地方公用資訊即時查詢。
+category: Government & Public Services
+provider: 臺南市政府
+provider_type: official
+docs_url: https://soa.tainan.gov.tw/
+website_url: https://data.gov.tw/dataset/6832
+base_url: https://soa.tainan.gov.tw/Api/Service/Get
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/6832
+- https://data.gov.tw/dataset/128852
+notes: 由 data.gov.tw 批次掃描發現，統一以 GUID 端點提供市政資料查詢。

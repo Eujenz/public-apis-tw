@@ -1,0 +1,24 @@
+id: mol-labor-health-check-institutions
+name_zh: 勞工體格及健康檢查認可醫療機構 API
+name_en: Recognized Medical Institutions for Labor Health Examination API
+description_zh: 勞動部職業安全衛生署提供之全國勞工體格及健康檢查認可醫療機構清冊 RESTful 查詢介面，包含機構名稱、地址、電話與認可類別。
+category: Healthcare & Public Health
+provider: 勞動部職業安全衛生署
+provider_type: official
+docs_url: https://data.gov.tw/dataset/6624
+website_url: https://data.gov.tw/dataset/6624
+base_url: https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-020057-Nvt
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/6624
+notes: '由 data.gov.tw 批次掃描 WEBSERVICES (nid: 6624) 自動產生之候選項目。'

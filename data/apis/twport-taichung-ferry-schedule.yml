@@ -1,0 +1,24 @@
+id: twport-taichung-ferry-schedule
+name_zh: 臺中港兩岸渡輪船期預報 API
+name_en: Taichung Port Cross-Strait Ferry Schedule Forecast API
+description_zh: 臺灣港務股份有限公司提供之臺中港兩岸定期客貨渡輪船期預報開放端點，支援動態船期排程與港口旅客運輸查詢。
+category: Transportation
+provider: 臺灣港務股份有限公司
+provider_type: official
+docs_url: https://data.gov.tw/dataset/44825
+website_url: https://data.gov.tw/dataset/44825
+base_url: https://tpapim-es.twport.com.tw:8065/v1.0/TcsNetOpenApi/GetForecastData
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/44825
+notes: '由 data.gov.tw 批次掃描 API 標籤 (tid: 11519) 發現。'

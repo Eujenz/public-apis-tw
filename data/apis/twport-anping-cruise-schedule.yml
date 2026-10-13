@@ -1,0 +1,24 @@
+id: twport-anping-cruise-schedule
+name_zh: 安平港國際郵輪船期預報 API
+name_en: Anping Port International Cruise Schedule Forecast API
+description_zh: 臺灣港務股份有限公司提供之安平港國際郵輪預報船期開放介面，提供船舶進出港排程與碼頭停泊動態查詢。
+category: Transportation
+provider: 臺灣港務股份有限公司
+provider_type: official
+docs_url: https://data.gov.tw/dataset/161479
+website_url: https://data.gov.tw/dataset/161479
+base_url: https://tpapim-es.twport.com.tw:8065/v1.0/TcsNetOpenApi/GetForecastData
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/161479
+notes: '由 data.gov.tw 批次掃描 API 標籤 (tid: 11519) 發現。'

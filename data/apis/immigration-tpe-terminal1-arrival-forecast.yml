@@ -1,0 +1,24 @@
+id: immigration-tpe-terminal1-arrival-forecast
+name_zh: 桃園機場第一航廈入境人次預報 API
+name_en: Taoyuan Airport Terminal 1 Arrival Passenger Forecast API
+description_zh: 內政部移民署提供之桃園國際機場第一航廈逐時入境旅客預報人次程式化介面，提供機場運量排程與地面交通接駁預測參考。
+category: Transportation
+provider: 內政部移民署
+provider_type: official
+docs_url: https://data.gov.tw/dataset/167537
+website_url: https://data.gov.tw/dataset/167537
+base_url: https://opendata.immigration.gov.tw/APIS/TPE11
+api_style: REST
+auth_type: none
+access_tier: free
+https_support: 'yes'
+cors_support: unknown
+license_name: OGDL-Taiwan-1.0
+commercial_use: allowed
+service_status: active
+review_status: candidate
+verification_level: none
+last_reviewed_at: '2026-10-14'
+sources:
+- https://data.gov.tw/dataset/167537
+notes: '由 data.gov.tw 批次掃描 API 標籤 (tid: 11519) 發現。'
