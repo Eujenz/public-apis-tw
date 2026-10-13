@@ -99,12 +99,18 @@
         "SOAP",
         "WebSocket",
         "OGC Web Services",
-        "OpenAPI",
         "RPC",
         "other",
         "unknown"
       ],
       "description": "Architectural style or protocol of the programmable API"
+    },
+    "spec_formats": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Machine-readable API specification formats provided (e.g. ['OpenAPI 3.0', 'Swagger 2.0', 'WSDL'])"
     },
     "data_formats": {
       "type": "array",

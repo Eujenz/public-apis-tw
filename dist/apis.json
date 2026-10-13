@@ -3,13 +3,12 @@
     "id": "cdc-surveillance-opendata",
     "name_zh": "疾病管制署傳染病統計資料 API",
     "name_en": "Taiwan CDC Infectious Disease Surveillance API",
-    "description_zh": "提供台灣法定傳染病（登革熱、流感、腸病毒、COVID-19 等）依縣市鄉鎮、年齡別與週別之確定病例數統計查詢。",
+    "description_zh": "提供台灣法定傳染病依縣市、年齡別與發病週別之確定病例數統計資料集與應用程式介面。",
     "category": "Healthcare & Public Health",
     "provider": "衛生福利部疾病管制署",
     "provider_type": "official",
-    "docs_url": "https://data.cdc.gov.tw/applications/api",
+    "docs_url": "https://data.cdc.gov.tw",
     "website_url": "https://data.cdc.gov.tw",
-    "base_url": "https://data.cdc.gov.tw/api/1/rest/datastore",
     "api_style": "REST",
     "data_formats": [
       "JSON",
@@ -19,20 +18,57 @@
     "access_tier": "free",
     "pricing_url": "https://data.cdc.gov.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "unknown",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
-    "rate_limit": "免金鑰直接呼叫，具備平台連線限速防護",
+    "rate_limit": "免金鑰直接存取，具備平台防護限制",
+    "service_status": "active",
+    "review_status": "needs_review",
+    "verification_level": "docs_reviewed",
+    "last_reviewed_at": "2026-10-13",
+    "sources": [
+      "https://data.cdc.gov.tw"
+    ],
+    "notes": "原登載之 `/applications/api` 端點返回 404 且自簽憑證異常；疾管署資料開放平台主要提供各傳染病固定 JSON/CSV 資源，特定資料集支援 CKAN Datastore API，待完成全面盤點與端點重測後再提升至 verified。"
+  },
+  {
+    "id": "chunghwa-post-zip33",
+    "name_zh": "中華郵政 3+3 郵遞區號查詢 Web Service",
+    "name_en": "Chunghwa Post 3+3 Postal Code Query Web Service",
+    "description_zh": "提供台灣標準地址正規化與 3+3 郵遞區號查詢、縣市行政區反查之官方 SOAP Web Service 介面。",
+    "category": "Government & Public Services",
+    "provider": "中華郵政股份有限公司",
+    "provider_type": "official",
+    "docs_url": "https://33wsp.post.gov.tw/LZWZIP/TZIP33.asmx",
+    "website_url": "https://www.post.gov.tw",
+    "base_url": "https://33wsp.post.gov.tw/LZWZIP/TZIP33.asmx",
+    "api_style": "SOAP",
+    "spec_formats": [
+      "WSDL"
+    ],
+    "data_formats": [
+      "XML",
+      "JSON"
+    ],
+    "auth_type": "other",
+    "access_tier": "free",
+    "pricing_url": "https://www.post.gov.tw",
+    "https_support": "yes",
+    "cors_support": "not_applicable",
+    "license_name": "OGDL-Taiwan-1.0",
+    "license_url": "https://data.gov.tw/license",
+    "commercial_use": "allowed",
+    "rate_limit": "需填寫申請書綁定固定 IP 白名單；限 TLS 1.2 以上傳輸",
     "service_status": "active",
     "review_status": "verified",
     "verification_level": "docs_reviewed",
     "last_reviewed_at": "2026-10-13",
     "sources": [
-      "https://data.cdc.gov.tw/applications/api",
-      "https://data.gov.tw/dataset/17840"
+      "https://33wsp.post.gov.tw/LZWZIP/TZIP33.asmx",
+      "https://www.post.gov.tw"
     ],
-    "notes": "適合公衛研究、區域傳染病即時儀表板建置。"
+    "notes": "官方標準 3+3 郵遞區號 Web Service，提供 GetZipCode、GetCityArea、GetZipAddress 等方法。介接需申請綁定固定 IP。"
   },
   {
     "id": "cwa-opendata",
@@ -46,6 +82,9 @@
     "website_url": "https://opendata.cwa.gov.tw",
     "base_url": "https://opendata.cwa.gov.tw/api/v1/rest/datastore",
     "api_style": "REST",
+    "spec_formats": [
+      "Swagger 2.0"
+    ],
     "data_formats": [
       "JSON",
       "XML"
@@ -54,7 +93,7 @@
     "access_tier": "free",
     "pricing_url": "https://opendata.cwa.gov.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "unknown",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
@@ -71,15 +110,14 @@
   },
   {
     "id": "dgpa-work-class-cancel",
-    "name_zh": "人事行政總處天然災害停止上班及上課 API",
-    "name_en": "DGPA Disaster Work & School Cancellation API",
-    "description_zh": "提供天然災害（颱風、豪雨、地震）發生時，台灣各縣市通報之停止上班上課（停班停課）即時狀態公告。",
+    "name_zh": "人事行政總處天然災害停止上班及上課資訊 (歷次統計)",
+    "name_en": "DGPA Disaster Work & School Cancellation Dataset",
+    "description_zh": "提供天然災害發生時，通報之停止上班上課資訊與歷次統計。",
     "category": "Government & Public Services",
     "provider": "行政院人事行政總處 (DGPA)",
     "provider_type": "official",
-    "docs_url": "https://data.gov.tw/dataset/26777",
+    "docs_url": "https://www.dgpa.gov.tw",
     "website_url": "https://www.dgpa.gov.tw",
-    "base_url": "https://dgpa.gov.tw/nds/opendata",
     "api_style": "REST",
     "data_formats": [
       "JSON",
@@ -87,22 +125,21 @@
     ],
     "auth_type": "none",
     "access_tier": "free",
-    "pricing_url": "https://data.gov.tw",
+    "pricing_url": "https://www.dgpa.gov.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "unknown",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
-    "rate_limit": "免金鑰直接存取，颱風期間伺服器負載較大",
+    "rate_limit": "免金鑰直接存取",
     "service_status": "active",
-    "review_status": "verified",
-    "verification_level": "docs_reviewed",
+    "review_status": "candidate",
+    "verification_level": "none",
     "last_reviewed_at": "2026-10-13",
     "sources": [
-      "https://data.gov.tw/dataset/26777",
       "https://www.dgpa.gov.tw"
     ],
-    "notes": "颱風警報發布期間最常被各類通知機器人與媒體介接之權威端點。"
+    "notes": "原登載之 data.gov.tw/dataset/26777 回應 500 且 base_url `/nds/opendata` 超時無法連線。人事行政總處官方即時公告多為網頁發布 (NDS HTML) 或歷次統計 CSV，缺乏官方長期維護之穩定公開 REST API 端點，保留為候選項目待確認。"
   },
   {
     "id": "moa-agri-trans",
@@ -131,19 +168,20 @@
     "rate_limit": "免金鑰公開存取",
     "service_status": "active",
     "review_status": "verified",
-    "verification_level": "docs_reviewed",
+    "verification_level": "endpoint_tested",
     "last_reviewed_at": "2026-10-13",
+    "last_endpoint_tested_at": "2026-10-13",
     "sources": [
       "https://data.moa.gov.tw",
       "https://data.gov.tw/dataset/8910"
     ],
-    "notes": "可藉由作物代碼或作物名稱查詢全台批發均價與交易總量。"
+    "notes": "可藉由作物代碼或作物名稱查詢全台批發均價與交易總量。經端點實測返回 200 JSON 且帶有 Access-Control-Allow-Origin: *。"
   },
   {
     "id": "moea-gcis-company",
-    "name_zh": "經濟部商工登記資料 API",
-    "name_en": "MOEA Business Registration OpenData API",
-    "description_zh": "提供台灣全國公司設立登記、商業登記、分公司資料及營業項目代碼之即時查詢介面。",
+    "name_zh": "經濟部商工行政登記資料 API",
+    "name_en": "MOEA Commercial & Business Registration Open Data API",
+    "description_zh": "提供全國公司設立登記、商業登記、分公司資料及營業項目代碼之即時查詢介面。",
     "category": "Finance & Business",
     "provider": "經濟部商業發展署",
     "provider_type": "official",
@@ -159,20 +197,20 @@
     "access_tier": "free",
     "pricing_url": "https://data.gcis.nat.gov.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "no",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
-    "rate_limit": "免金鑰直接存取，但有伺服器頻率防護 (IP-based rate limit)",
+    "rate_limit": "免金鑰直接存取，但有頻率限制；若需大流量或穩定介接需填寫使用告知書登記固定 IP",
     "service_status": "active",
     "review_status": "verified",
-    "verification_level": "docs_reviewed",
+    "verification_level": "endpoint_tested",
     "last_reviewed_at": "2026-10-13",
+    "last_endpoint_tested_at": "2026-10-13",
     "sources": [
-      "https://data.gcis.nat.gov.tw/od/rule",
-      "https://data.gov.tw/dataset/9645"
+      "https://data.gcis.nat.gov.tw/od/rule"
     ],
-    "notes": "可藉由統一編號 (統編) 或公司名稱進行前綴與精準搜尋。"
+    "notes": "可藉由統一編號查詢公司登記現況。經端點實測返回 200 JSON；伺服器未啟用 CORS 標頭，前端瀏覽器需由後端轉發。"
   },
   {
     "id": "moenv-air-quality",
@@ -186,6 +224,9 @@
     "website_url": "https://data.moenv.gov.tw",
     "base_url": "https://data.moenv.gov.tw/api/v2",
     "api_style": "REST",
+    "spec_formats": [
+      "Swagger 2.0"
+    ],
     "data_formats": [
       "JSON",
       "XML",
@@ -195,7 +236,7 @@
     "access_tier": "free",
     "pricing_url": "https://data.moenv.gov.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "unknown",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
@@ -248,14 +289,17 @@
     "id": "ncdr-cap-disaster",
     "name_zh": "國家災害防救科技中心 (NCDR) 示警公開資料 API",
     "name_en": "NCDR Common Alerting Protocol (CAP) Disaster Warning API",
-    "description_zh": "彙整台灣中央氣象署、水利署、水保署、公路局等跨部會之即時天然災害（颱風、豪雨、土石流、地震、道路阻斷）標準 CAP 示警訊號。",
+    "description_zh": "彙整中央氣象署、水利署、農村水保署、公路局等跨部會之天然災害（颱風、豪雨、土石流、地震）標準 CAP 示警訊號。",
     "category": "Government & Public Services",
     "provider": "國家災害防救科技中心 (NCDR)",
     "provider_type": "official",
-    "docs_url": "https://alerts.ncdr.nat.gov.tw/Api.aspx",
+    "docs_url": "https://alerts.ncdr.nat.gov.tw/api_swagger/swagger.json",
     "website_url": "https://alerts.ncdr.nat.gov.tw",
-    "base_url": "https://alerts.ncdr.nat.gov.tw/api/datastore",
+    "base_url": "https://alerts.ncdr.nat.gov.tw/api",
     "api_style": "REST",
+    "spec_formats": [
+      "Swagger 2.0"
+    ],
     "data_formats": [
       "JSON",
       "XML"
@@ -264,7 +308,7 @@
     "access_tier": "free",
     "pricing_url": "https://alerts.ncdr.nat.gov.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "unknown",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
@@ -274,22 +318,21 @@
     "verification_level": "docs_reviewed",
     "last_reviewed_at": "2026-10-13",
     "sources": [
-      "https://alerts.ncdr.nat.gov.tw/Api.aspx",
-      "https://data.gov.tw/dataset/25768"
+      "https://alerts.ncdr.nat.gov.tw",
+      "https://alerts.ncdr.nat.gov.tw/api_swagger/swagger.json"
     ],
-    "notes": "採用國際 OASIS CAP (Common Alerting Protocol) 規範格式輸出跨領域示警。"
+    "notes": "原登載之 Api.aspx 產生重新導向迴圈，官方現行規格以 swagger.json 與會員專區為準。採用國際 OASIS CAP 規範輸出。"
   },
   {
     "id": "nhi-medical-institutions",
-    "name_zh": "健保署特約醫療院所與即時服務 API",
-    "name_en": "NHI Contracted Medical Facilities API",
-    "description_zh": "提供台灣全台健保特約醫院、診所、特約藥局基本資料、診療科別與就醫服務時段查詢。",
+    "name_zh": "健保署特約醫療院所名冊資料集 (含介接)",
+    "name_en": "NHI Contracted Medical Facilities Dataset",
+    "description_zh": "提供全台健保特約醫院、診所、特約藥局基本資料、診療科別與醫事機構種類。",
     "category": "Healthcare & Public Health",
     "provider": "衛生福利部中央健康保險署",
     "provider_type": "official",
-    "docs_url": "https://data.gov.tw/dataset/21008",
+    "docs_url": "https://data.gov.tw/dataset/168341",
     "website_url": "https://www.nhi.gov.tw",
-    "base_url": "https://data.nhi.gov.tw/resource/OpenData",
     "api_style": "REST",
     "data_formats": [
       "JSON",
@@ -299,36 +342,35 @@
     "access_tier": "free",
     "pricing_url": "https://data.gov.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "unknown",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
     "rate_limit": "免金鑰公開存取",
     "service_status": "active",
-    "review_status": "verified",
+    "review_status": "needs_review",
     "verification_level": "docs_reviewed",
     "last_reviewed_at": "2026-10-13",
     "sources": [
-      "https://data.gov.tw/dataset/21008",
-      "https://data.nhi.gov.tw"
+      "https://data.gov.tw/dataset/168341",
+      "https://www.nhi.gov.tw"
     ],
-    "notes": "可搭配地址或經緯度開發尋找附近診所、藥局或專科醫療之應用。"
+    "notes": "原登載之 dataset/21008 為急難救助基金之錯誤 ID，正確資料集為 168341；原登載之 data.nhi.gov.tw 主機已無法解析 DNS。健保署目前主要透過政府資料開放平台提供定期更新之 CSV/JSON 檔案與平台介接端點，待核實即時 API 規格後再提升至 verified。"
   },
   {
     "id": "nlsc-map-api",
-    "name_zh": "國土測繪圖資服務雲 API",
-    "name_en": "NLSC Web Map & Coordinate API",
-    "description_zh": "提供台灣全島通用版電子地圖 (WMTS)、正射影像圖、地段代碼查詢、地籍圖層與坐標轉換服務。",
+    "name_zh": "國土測繪圖資服務雲 WMTS API",
+    "name_en": "NLSC Web Map Tile Service (WMTS) API",
+    "description_zh": "提供台灣全島通用版電子地圖、正射影像圖、國土利用現況圖及村里行政界線等 OGC WMTS 圖磚服務。",
     "category": "Maps & Geospatial",
     "provider": "內政部國土測繪中心",
     "provider_type": "official",
-    "docs_url": "https://maps.nlsc.gov.tw/Opendata/",
+    "docs_url": "https://maps.nlsc.gov.tw/S09SOA/",
     "website_url": "https://maps.nlsc.gov.tw",
-    "base_url": "https://maps.nlsc.gov.tw/S_Maps",
+    "base_url": "https://wmts.nlsc.gov.tw/wmts",
     "api_style": "OGC Web Services",
     "data_formats": [
-      "XML",
-      "JSON"
+      "XML"
     ],
     "auth_type": "none",
     "access_tier": "free",
@@ -338,22 +380,23 @@
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
-    "rate_limit": "免金鑰直接介接 WMTS 與地段地籍查詢服務，部分大流量需申請單位帳號",
+    "rate_limit": "臺灣通用電子地圖與正射影像免申請直接存取；地籍圖磚與路徑規劃需專案申請",
     "service_status": "active",
     "review_status": "verified",
-    "verification_level": "docs_reviewed",
+    "verification_level": "endpoint_tested",
     "last_reviewed_at": "2026-10-13",
+    "last_endpoint_tested_at": "2026-10-13",
     "sources": [
-      "https://maps.nlsc.gov.tw/Opendata/",
-      "https://data.gov.tw/dataset/131012"
+      "https://maps.nlsc.gov.tw/S09SOA/",
+      "https://wmts.nlsc.gov.tw/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0"
     ],
-    "notes": "支援 OGC WMTS 標準圖磚介接，常與 Leaflet / OpenLayers 搭配使用。"
+    "notes": "支援 OGC WMTS 標準 GetCapabilities 與 GetTile 操作。經測試回傳 HTTP 200 與 Access-Control-Allow-Origin: *。"
   },
   {
     "id": "taipei-opendata-portal",
     "name_zh": "台北市政府資料開放平台 API",
     "name_en": "Taipei City OpenData DataStore API",
-    "description_zh": "台北市政府資料大平台提供之 CKAN-like 資料集查詢、即時路況、停車場即時剩餘車位等 RESTful 介面。",
+    "description_zh": "台北市政府資料大平台提供之資料集查詢、即時路況、停車場即時剩餘車位等 RESTful 介面。",
     "category": "Government & Public Services",
     "provider": "台北市政府資訊局",
     "provider_type": "official",
@@ -368,32 +411,33 @@
     "access_tier": "free",
     "pricing_url": "https://data.taipei",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "no",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
-    "rate_limit": "免金鑰直接呼叫，具備全站 WAF 與速率防護",
+    "rate_limit": "免金鑰直接呼叫，具備全站速率防護",
     "service_status": "active",
     "review_status": "verified",
-    "verification_level": "docs_reviewed",
+    "verification_level": "endpoint_tested",
     "last_reviewed_at": "2026-10-13",
+    "last_endpoint_tested_at": "2026-10-13",
     "sources": [
       "https://data.taipei",
       "https://data.taipei/dataset/detail?id=c627670e-1ef6-43cb-9351-5b74c053c713"
     ],
-    "notes": "台北市即時停車格與公車到站資訊被各類地圖導航應用深度採用。"
+    "notes": "台北市即時停車格與公車到站資訊被各類地圖導航應用採用。經端點實測返回 200 JSON；Access-Control-Allow-Origin 限制為 https://data.taipei，外部跨域存取需後端代理。"
   },
   {
     "id": "taipower-power-status",
-    "name_zh": "台灣電力公司今日供電資訊 API",
-    "name_en": "Taiwan Power Company Electricity Supply Status API",
-    "description_zh": "提供台灣全島當日用電曲線、預估最高用電量、即時淨發購電量及備轉容量率燈號。",
+    "name_zh": "台灣電力公司今日發電與電力供需資訊 API",
+    "name_en": "Taipower Real-Time Electricity Generation & Supply API",
+    "description_zh": "提供台灣全島即時各機組發電量、能源類型佔比、當日用電曲線及供電備轉容量率。",
     "category": "Government & Public Services",
     "provider": "台灣電力公司",
     "provider_type": "official",
-    "docs_url": "https://data.gov.tw/dataset/19995",
+    "docs_url": "https://www.taipower.com.tw",
     "website_url": "https://www.taipower.com.tw",
-    "base_url": "https://service.taipower.com.tw/data/opendata/apply/file/d006001",
+    "base_url": "https://service.taipower.com.tw/data/opendata/apply/file/d006001/001.json",
     "api_style": "REST",
     "data_formats": [
       "JSON"
@@ -402,53 +446,21 @@
     "access_tier": "free",
     "pricing_url": "https://data.gov.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "no",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
-    "rate_limit": "免金鑰公開存取",
+    "rate_limit": "免金鑰公開存取；每 10 分鐘定時更新",
     "service_status": "active",
     "review_status": "verified",
-    "verification_level": "docs_reviewed",
+    "verification_level": "endpoint_tested",
     "last_reviewed_at": "2026-10-13",
+    "last_endpoint_tested_at": "2026-10-13",
     "sources": [
-      "https://data.gov.tw/dataset/19995",
-      "https://www.taipower.com.tw"
+      "https://www.taipower.com.tw",
+      "https://service.taipower.com.tw/data/opendata/apply/file/d006001/001.json"
     ],
-    "notes": "每 10 分鐘更新一次即時供電狀況與備轉容量燈號。"
-  },
-  {
-    "id": "taiwan-post-zipcode",
-    "name_zh": "中華郵政 3+3 郵遞區號與地址剖析 API (社群)",
-    "name_en": "Taiwan Zipcode & Address Parser API (Community)",
-    "description_zh": "開源社群封裝之中華郵政新版 3+3 郵遞區號查詢與中文地址正規化斷詞 REST API。",
-    "category": "Developer Tools",
-    "provider": "g0v / 開源社群協作者",
-    "provider_type": "third_party",
-    "docs_url": "https://github.com/mister-hope/taiwan-postcode",
-    "website_url": "https://github.com/mister-hope/taiwan-postcode",
-    "base_url": "https://api.postcode.tw/v1",
-    "api_style": "REST",
-    "data_formats": [
-      "JSON"
-    ],
-    "auth_type": "none",
-    "access_tier": "free",
-    "pricing_url": "https://github.com/mister-hope/taiwan-postcode",
-    "https_support": "yes",
-    "cors_support": "yes",
-    "license_name": "MIT",
-    "license_url": "https://opensource.org/licenses/MIT",
-    "commercial_use": "allowed",
-    "rate_limit": "社群公共節點有限速，建議大量調用者自行以 Docker 部署開源版本",
-    "service_status": "active",
-    "review_status": "verified",
-    "verification_level": "docs_reviewed",
-    "last_reviewed_at": "2026-10-13",
-    "sources": [
-      "https://github.com/mister-hope/taiwan-postcode"
-    ],
-    "notes": "非中華郵政官方自建端點，為社群基於中華郵政公開資料庫實作之高可用性微服務。"
+    "notes": "端點經實測返回 200 JSON（包含各機組最新發電與淨發購電數據）。未開啟 CORS 跨域標頭，瀏覽器前端調用需透過後端轉發。"
   },
   {
     "id": "tbroc-tourism",
@@ -462,6 +474,9 @@
     "website_url": "https://admin.taiwan.net.tw",
     "base_url": "https://tdx.transportdata.tw/api/basic/v2/Tourism",
     "api_style": "REST",
+    "spec_formats": [
+      "Swagger 2.0"
+    ],
     "data_formats": [
       "JSON",
       "XML"
@@ -470,7 +485,7 @@
     "access_tier": "free",
     "pricing_url": "https://tdx.transportdata.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "unknown",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
@@ -497,6 +512,9 @@
     "website_url": "https://tdx.transportdata.tw",
     "base_url": "https://tdx.transportdata.tw/api/basic/v2",
     "api_style": "REST",
+    "spec_formats": [
+      "Swagger 2.0"
+    ],
     "data_formats": [
       "JSON",
       "XML"
@@ -505,7 +523,7 @@
     "access_tier": "free",
     "pricing_url": "https://tdx.transportdata.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "unknown",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
@@ -522,43 +540,44 @@
   },
   {
     "id": "tgos-geocoder",
-    "name_zh": "TGOS 全國地理資訊圖資雲門牌地址定位 API",
-    "name_en": "TGOS Address Geocoding API",
-    "description_zh": "內政部地理資訊圖資雲服務平台提供之標準門牌地址定位 (Geocoding) 與坐標反查服務。",
+    "name_zh": "TGOS 全國門牌地址定位與地圖 API",
+    "name_en": "TGOS Address Geocoding & Map API",
+    "description_zh": "內政部地理資訊圖資雲服務平台提供之門牌地址定位 (Geocoding)、坐標反查與地圖前端元件服務。",
     "category": "Maps & Geospatial",
-    "provider": "內政部地政司 / 資訊中心",
+    "provider": "內政部資訊服務司 / 國土測繪圖資雲",
     "provider_type": "official",
-    "docs_url": "https://www.tgos.tw/TGOS/Web/Services/TGOS_Services.aspx",
+    "docs_url": "https://api.tgos.tw/",
     "website_url": "https://www.tgos.tw",
-    "base_url": "https://gis.tgos.tw/TGOS_MAP_API/Web/TGOS_API.aspx",
+    "base_url": "https://api.tgos.tw/TGOS_API/tgos",
     "api_style": "REST",
     "data_formats": [
       "JSON",
       "XML"
     ],
     "auth_type": "api_key",
-    "access_tier": "free",
+    "access_tier": "free_tier",
     "pricing_url": "https://www.tgos.tw",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "unknown",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
-    "rate_limit": "需申請 TGOS 會員並註冊 APP ID / API Key，免費額度每日有限制",
+    "rate_limit": "需申請會員取得 AppID 與 APIKey 並設定授權網域/IP；批次比對每日有限額",
     "service_status": "active",
     "review_status": "verified",
     "verification_level": "docs_reviewed",
     "last_reviewed_at": "2026-10-13",
     "sources": [
-      "https://www.tgos.tw/TGOS/Web/Services/TGOS_Services.aspx"
+      "https://api.tgos.tw/",
+      "https://www.tgos.tw"
     ],
-    "notes": "台灣最具權威性的公部門門牌座標對照服務。"
+    "notes": "原登載之舊版 aspx 頁面已 404；已更新為 TGOS API 官方服務入口 https://api.tgos.tw/。"
   },
   {
     "id": "tpex-openapi",
     "name_zh": "證券櫃檯買賣中心 OpenAPI",
     "name_en": "Taipei Exchange (TPEx) OpenAPI",
-    "description_zh": "提供台灣上櫃股票行情、興櫃股票交易資訊、公債市場與外幣計價債券每日統計之 OpenAPI 介面。",
+    "description_zh": "提供上櫃股票行情、興櫃股票交易資訊、公債市場與外幣計價債券每日統計之 OpenAPI 介面。",
     "category": "Finance & Business",
     "provider": "證券櫃檯買賣中心 (TPEx)",
     "provider_type": "official",
@@ -566,6 +585,9 @@
     "website_url": "https://www.tpex.org.tw",
     "base_url": "https://www.tpex.org.tw/openapi/v1",
     "api_style": "REST",
+    "spec_formats": [
+      "OpenAPI 3.0"
+    ],
     "data_formats": [
       "JSON"
     ],
@@ -573,7 +595,7 @@
     "access_tier": "free",
     "pricing_url": "https://www.tpex.org.tw/openapi/",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "unknown",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
@@ -585,7 +607,7 @@
     "sources": [
       "https://www.tpex.org.tw/openapi/"
     ],
-    "notes": "與 TWSE 搭配可覆蓋台灣上市與上櫃雙軌證券交易行情。"
+    "notes": "與 TWSE 搭配可覆蓋台灣上市與上櫃雙軌證券交易行情。官方提供 OpenAPI 3.0 規範。"
   },
   {
     "id": "tw-air-quality-history",
@@ -617,7 +639,7 @@
     "id": "twse-openapi",
     "name_zh": "台灣證券交易所 OpenAPI",
     "name_en": "Taiwan Stock Exchange (TWSE) OpenAPI",
-    "description_zh": "提供台灣集中交易市場每日收盤行情、個股本益比/殖利率、除權息公告、大盤指數與上市基本資訊之 OpenAPI 介面。",
+    "description_zh": "提供集中交易市場每日收盤行情、個股本益比/殖利率、除權息公告、大盤指數與上市基本資訊之 OpenAPI 介面。",
     "category": "Finance & Business",
     "provider": "臺灣證券交易所 (TWSE)",
     "provider_type": "official",
@@ -625,6 +647,9 @@
     "website_url": "https://www.twse.com.tw",
     "base_url": "https://openapi.twse.com.tw/v1",
     "api_style": "REST",
+    "spec_formats": [
+      "OpenAPI 3.0"
+    ],
     "data_formats": [
       "JSON"
     ],
@@ -632,35 +657,37 @@
     "access_tier": "free",
     "pricing_url": "https://openapi.twse.com.tw/",
     "https_support": "yes",
-    "cors_support": "yes",
+    "cors_support": "no",
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
     "rate_limit": "免金鑰直接呼叫，設有每分鐘請求上限以維護服務穩定",
     "service_status": "active",
     "review_status": "verified",
-    "verification_level": "docs_reviewed",
+    "verification_level": "endpoint_tested",
     "last_reviewed_at": "2026-10-13",
+    "last_endpoint_tested_at": "2026-10-13",
     "sources": [
       "https://openapi.twse.com.tw/",
       "https://data.gov.tw/dataset/11549"
     ],
-    "notes": "回傳最新交易日之每日行情資料，歷史回溯需依不同端點規範。"
+    "notes": "提供上市每日收盤行情與上市公司基本資訊。經端點實測返回 200 JSON；伺服器未啟用 CORS 標頭，前端瀏覽器存取需由後端代理轉發。"
   },
   {
     "id": "wra-water-resources",
-    "name_zh": "經濟部水利署水資源即時資料 API",
-    "name_en": "WRA Real-time Water Resources API",
-    "description_zh": "提供台灣主要水庫蓄水量、水情燈號、全台河川水位、淹水警戒與雨量站觀測數據。",
+    "name_zh": "經濟部水利署水情與水利開放資料 API",
+    "name_en": "WRA Water Resources Open Data & FHY API",
+    "description_zh": "提供水庫蓄水量、水情燈號、全台河川水位、淹水感測警戒與雨量站觀測數據。",
     "category": "Weather & Environment",
     "provider": "經濟部水利署",
     "provider_type": "official",
-    "docs_url": "https://data.gov.tw/dataset/41585",
+    "docs_url": "https://opendata.wra.gov.tw",
     "website_url": "https://www.wra.gov.tw",
     "base_url": "https://fhy.wra.gov.tw/WraApi/v1",
     "api_style": "REST",
     "data_formats": [
-      "JSON"
+      "JSON",
+      "XML"
     ],
     "auth_type": "api_key",
     "access_tier": "free",
@@ -670,15 +697,15 @@
     "license_name": "OGDL-Taiwan-1.0",
     "license_url": "https://data.gov.tw/license",
     "commercial_use": "allowed",
-    "rate_limit": "需至水利署水防情 API 專區免費註冊取得 AppKey",
+    "rate_limit": "需至水防情 API 專區免費註冊取得 AppKey 存取",
     "service_status": "active",
     "review_status": "verified",
     "verification_level": "docs_reviewed",
     "last_reviewed_at": "2026-10-13",
     "sources": [
       "https://fhy.wra.gov.tw/WraApi/",
-      "https://data.gov.tw/dataset/41585"
+      "https://opendata.wra.gov.tw"
     ],
-    "notes": "颱風與枯水期間應用最廣泛之官方水情資料來源。"
+    "notes": "原登載之 dataset/41585 於開放平台已失效；水利署主要透過 opendata.wra.gov.tw 及 fhy.wra.gov.tw/WraApi 提供防汛資料服務。"
   }
 ]

@@ -10,7 +10,9 @@ provider_type: "official" # 可選: official, third_party
 docs_url: "https://example.gov.tw/api/docs"
 website_url: "https://example.gov.tw"
 base_url: "https://example.gov.tw/api/v1"
-api_style: "REST" # 可選: REST, GraphQL, SOAP, WebSocket, OGC Web Services, OpenAPI, RPC, other, unknown
+api_style: "REST" # 可選: REST, GraphQL, SOAP, WebSocket, OGC Web Services, RPC, other, unknown
+spec_formats: # 選填: 提供之機器可讀規格 (例如: ['OpenAPI 3.0', 'Swagger 2.0'])
+  - "OpenAPI 3.0"
 data_formats:
   - "JSON"
 auth_type: "api_key" # 可選: none, api_key, oauth, other, unknown
