@@ -1,0 +1,20 @@
+[project]
+name = "public-apis-tw"
+version = "0.1.0"
+description = "A curated directory of APIs for building products in Taiwan"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pyyaml>=6.0.2",
+    "jsonschema>=4.23.0",
+    "requests>=2.32.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.4",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

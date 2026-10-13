@@ -1,0 +1,31 @@
+# API 資料條目範本 (api-template.yml)
+# 請複製此檔案至 data/apis/<id>.yml 並填寫對應資訊
+id: "example-api"
+name_zh: "範例 API 名稱"
+name_en: "Example API"
+description_zh: "提供台灣某領域之即時資料查詢介面。"
+category: "Government" # 可選: Government, Finance & Business, Weather & Environment, Transportation, Maps & Geospatial, Culture & Tourism, Education & Research, Healthcare & Public Health, Developer Tools, Other
+provider: "範例服務提供機關或單位"
+provider_type: "official" # 可選: official, third_party
+docs_url: "https://example.gov.tw/api/docs"
+website_url: "https://example.gov.tw"
+base_url: "https://example.gov.tw/api/v1"
+api_style: "REST" # 可選: REST, GraphQL, SOAP, OpenAPI, RPC, other, unknown
+data_formats:
+  - "JSON"
+auth_type: "api_key" # 可選: none, api_key, oauth, other, unknown
+access_tier: "free" # 可選: free, free_tier, paid, unknown
+pricing_url: "https://example.gov.tw/pricing"
+https_support: "yes" # 可選: yes, no, unknown
+cors_support: "unknown" # 可選: yes, no, unknown, not_applicable
+license_name: "OGDL-Taiwan-1.0" # 若不確定請填 unknown
+license_url: "https://data.gov.tw/license"
+commercial_use: "allowed" # 可選: allowed, restricted, prohibited, unknown
+rate_limit: "50 requests/min" # 若無明確限制可省略
+service_status: "active" # 可選: active, deprecated, unavailable, unknown
+review_status: "verified" # 可選: verified, candidate, deprecated
+verification_level: "docs_reviewed" # 可選: none, docs_reviewed, endpoint_tested, sample_response_checked
+last_verified_at: "2026-10-13" # YYYY-MM-DD
+sources:
+  - "https://example.gov.tw/api/docs"
+notes: "備註說明，若無特殊限制可省略此欄位。"

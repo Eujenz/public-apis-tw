@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PublicApiTaiwanEntry",
+  "description": "Schema definition for Taiwan Public API catalog entries",
+  "type": "object",
+  "required": [
+    "id",
+    "name_zh",
+    "description_zh",
+    "category",
+    "provider",
+    "provider_type",
+    "docs_url",
+    "api_style",
+    "auth_type",
+    "access_tier",
+    "https_support",
+    "cors_support",
+    "license_name",
+    "commercial_use",
+    "service_status",
+    "review_status",
+    "verification_level",
+    "last_verified_at",
+    "sources"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Unique slug identifier (kebab-case)"
+    },
+    "name_zh": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Traditional Chinese name of the API"
+    },
+    "name_en": {
+      "type": "string",
+      "description": "English name of the API"
+    },
+    "description_zh": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Objective, concise description in Traditional Chinese"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Government",
+        "Finance & Business",
+        "Weather & Environment",
+        "Transportation",
+        "Maps & Geospatial",
+        "Culture & Tourism",
+        "Education & Research",
+        "Healthcare & Public Health",
+        "Developer Tools",
+        "Other"
+      ],
+      "description": "Primary category"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Organization or entity providing the API"
+    },
+    "provider_type": {
+      "type": "string",
+      "enum": [
+        "official",
+        "third_party"
+      ],
+      "description": "Whether the provider is the official authority or a third party"
+    },
+    "docs_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "description": "URL to the official technical documentation"
+    },
+    "website_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "description": "Service or provider homepage"
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "description": "API base endpoint URL (omit if uncertain)"
+    },
+    "api_style": {
+      "type": "string",
+      "enum": [
+        "REST",
+        "GraphQL",
+        "SOAP",
+        "OpenAPI",
+        "RPC",
+        "other",
+        "unknown"
+      ],
+      "description": "Architectural style of the API"
+    },
+    "data_formats": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Supported response formats, e.g. ['JSON', 'XML']"
+    },
+    "auth_type": {
+      "type": "string",
+      "enum": [
+        "none",
+        "api_key",
+        "oauth",
+        "other",
+        "unknown"
+      ],
+      "description": "Authentication mechanism"
+    },
+    "access_tier": {
+      "type": "string",
+      "enum": [
+        "free",
+        "free_tier",
+        "paid",
+        "unknown"
+      ],
+      "description": "Pricing access tier"
+    },
+    "pricing_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "description": "Link to pricing, tier, or quota details"
+    },
+    "https_support": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ],
+      "description": "HTTPS support"
+    },
+    "cors_support": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown",
+        "not_applicable"
+      ],
+      "description": "CORS support for browser-side requests"
+    },
+    "license_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Name of the license, e.g. 'OGDL-Taiwan-1.0', 'CC BY 4.0', 'Proprietary', 'unknown'"
+    },
+    "license_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "description": "Link to license terms"
+    },
+    "commercial_use": {
+      "type": "string",
+      "enum": [
+        "allowed",
+        "restricted",
+        "prohibited",
+        "unknown"
+      ],
+      "description": "Commercial use permissions"
+    },
+    "rate_limit": {
+      "type": "string",
+      "description": "Known rate limiting rule, e.g. '50 requests/min'"
+    },
+    "service_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "deprecated",
+        "unavailable",
+        "unknown"
+      ],
+      "description": "Current availability status of the service"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "candidate",
+        "deprecated"
+      ],
+      "description": "Catalog curation review status"
+    },
+    "verification_level": {
+      "type": "string",
+      "enum": [
+        "none",
+        "docs_reviewed",
+        "endpoint_tested",
+        "sample_response_checked"
+      ],
+      "description": "Depth of technical verification performed"
+    },
+    "last_verified_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Date of last verification (YYYY-MM-DD)"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^https?://"
+      },
+      "description": "List of supporting URLs verifying this record"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Important caveats, technical notes, or pending items"
+    }
+  },
+  "additionalProperties": false
+}

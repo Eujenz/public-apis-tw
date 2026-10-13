@@ -1,0 +1,19 @@
+name: 回報無效或變更的 API (Broken / Outdated API)
+description: 回報端點失效、文件連結 404 或規格重大變更
+title: "[Broken/Outdated]: "
+labels: ["bug", "triage"]
+body:
+  - type: input
+    id: api_id
+    attributes:
+      label: API ID
+      description: 專案目錄中的 id，例如 `cwa-opendata`
+    validations:
+      required: true
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: 問題描述
+      description: 說明目前遇到的狀況（如：端點無法連線、官方已改用新版網址等）
+    validations:
+      required: true

@@ -1,0 +1,54 @@
+name: 新增 API 提案 (New API Suggestion)
+description: 建議收錄一個新的台灣公共或開放 API
+title: "[API]: "
+labels: ["api-addition", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感謝您為 `public-apis-tw` 貢獻新的 API！請在提交前確認該 API 符合[收錄政策](docs/catalog-policy.md)。
+  - type: input
+    id: api_name
+    attributes:
+      label: API 名稱
+      description: 繁體中文名稱 (必要時附英文名稱)
+      placeholder: 例如：中央氣象署開放資料平台
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: API 簡介
+      description: 簡述功能與適用情境
+    validations:
+      required: true
+  - type: input
+    id: docs_url
+    attributes:
+      label: 官方技術文件網址
+      placeholder: https://...
+    validations:
+      required: true
+  - type: dropdown
+    id: auth_type
+    attributes:
+      label: 身份驗證機制
+      options:
+        - none
+        - api_key
+        - oauth
+        - other
+        - unknown
+    validations:
+      required: true
+  - type: dropdown
+    id: access_tier
+    attributes:
+      label: 計費/使用層級
+      options:
+        - free
+        - free_tier
+        - paid
+        - unknown
+    validations:
+      required: true

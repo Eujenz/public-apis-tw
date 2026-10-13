@@ -1,0 +1,55 @@
+# 授權條款 (Licenses)
+
+本專案 `public-apis-tw` 採雙重授權模式（Dual Licensing），將「程式碼與建置工具」及「目錄彙整資料」分別明確界定：
+
+---
+
+## 1. 程式碼與建置工具 (Code & Tooling)
+
+本專案包含的所有驗證腳本、編譯工具、測試代碼與 Schema 規格（包含 `scripts/`、`tests/`、`schemas/` 等）：
+
+採用 **MIT License** 授權：
+
+```text
+MIT License
+
+Copyright (c) 2026 public-apis-tw Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
+## 2. 目錄彙整資料與文件 (Catalog Data & Documentation)
+
+本專案所彙整之中繼資料檔案（`data/apis/*.yml`）、編譯產出之目錄（`docs/catalog.md`、`dist/apis.json`）及專案說明文件：
+
+採用 **創用 CC 姓名標示 4.0 國際 (CC BY 4.0)** 授權：
+- 您可自由分享、散布、修改與基於任何目的（含商業用途）利用本彙整資料。
+- 唯須提供適當表彰（姓名標示），指名來源為 `public-apis-tw` 專案。
+
+詳細條款請參閱：[Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/legalcode.zh-Hant)
+
+---
+
+## 3. 第三方 API 與官方資料之權利聲明 (Third-Party Rights Disclaimer)
+
+- 本目錄所收錄之各個 API 服務其商標、官方文件、回傳資料與端點所有權均歸各自提供機關或法人所有。
+- 多數台灣政府開放 API 遵循「政府資料開放授權條款 (OGDL-Taiwan-1.0)」；第三方服務則適用其個別宣告之服務條款與授權協議。
+- 本專案僅進行資訊索引、結構化整理與元資料編目，不代表任何官方背書，亦不承擔第三方 API 之可用性與連線品質責任。
