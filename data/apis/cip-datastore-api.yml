@@ -9,13 +9,13 @@ docs_url: https://data.cip.gov.tw/
 website_url: https://data.gov.tw/dataset/178594
 base_url: https://data.cip.gov.tw/API/v1/dump/datastore
 api_style: REST
-auth_type: none
+auth_type: unknown
 access_tier: free
 https_support: 'yes'
 cors_support: unknown
 license_name: OGDL-Taiwan-1.0
 commercial_use: allowed
-service_status: active
+service_status: unknown
 review_status: candidate
 verification_level: none
 last_reviewed_at: '2026-10-14'

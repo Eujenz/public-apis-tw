@@ -116,6 +116,25 @@ def test_warn_on_stale_review_date():
     assert errors == []
     assert any("超過 365 天" in w for w in warnings)
 
+def test_warn_on_stale_endpoint_tested_date():
+    """端點實測日期超過 90 天時必須提出時效警告 (90-day Expiry Warning)"""
+    entry = copy.deepcopy(VALID_ENTRY_SAMPLE)
+    entry["review_status"] = "verified"
+    entry["verification_level"] = "endpoint_tested"
+    entry["last_reviewed_at"] = "2026-10-14"
+    entry["last_endpoint_tested_at"] = "2026-05-01"  # 超過 90 天
+    errors, warnings = validate_entry(entry, today_date="2026-10-14")
+    assert errors == []
+    assert any("超過 90 天" in w for w in warnings)
+
+def test_reject_invalid_date_format():
+    """日期格式不符 (如 2026/10/14 或無效字串) 必須報錯"""
+    entry = copy.deepcopy(VALID_ENTRY_SAMPLE)
+    entry["last_reviewed_at"] = "2026/10/14"
+    errors, _ = validate_entry(entry)
+    assert any("last_reviewed_at" in e for e in errors)
+
+
 def test_validate_catalog_detects_duplicate_id_in_directory(tmp_path):
     """目錄中若有兩個檔案具有相同 id，validate_catalog 必須攔截重複 id 錯誤"""
     # 建立兩個檔案，具有相同 id

@@ -74,7 +74,7 @@ def test_scanner_end_to_end_with_fixture():
     """從 Fixture 執行端到端掃描，斷言過濾比率與產出項目的 Schema 合規性"""
     assert FIXTURE_FILE.exists()
     
-    entries = run_scanner(fixture_path=FIXTURE_FILE, dry_run=True)
+    entries = run_scanner(fixture_path=FIXTURE_FILE, dry_run=True, ignore_existing=True)
     
     # Fixture 中共 5 筆，其中 2 筆為純檔案 (6239, 137993)，應被過濾；留下 3 筆真實 API
     assert len(entries) == 3
@@ -91,4 +91,41 @@ def test_scanner_end_to_end_with_fixture():
         assert errors == [], f"動態產生的候選項目 {entry['id']} 未通過 Schema 驗證: {errors}"
         assert entry["review_status"] == "candidate"
         assert entry["verification_level"] == "none"
+        # 關鍵驗證：未經實地探測與規格審查的欄位必須為 unknown，絕不盲目猜測
+        assert entry["service_status"] == "unknown", "候選條目不可未經探測宣稱 active"
+        assert entry["auth_type"] in ("unknown", "api_key")
         assert "sources" in entry and len(entry["sources"]) >= 1
+
+def test_scanner_deduplication_by_nid_and_endpoint():
+    """確認已在目錄中收錄的來源 NID 與端點不會被重複生成 candidate"""
+    from scan_data_gov_tw import cluster_and_filter
+
+    item = {
+        "nid": "167537",
+        "title": "桃園機場第一航廈入境人次預報",
+        "agency": "內政部移民署",
+        "valid_endpoints": ["https://opendata.immigration.gov.tw/APIS/TPE11"]
+    }
+    
+    # 情境 1: NID 已經在既有目錄指紋中
+    filtered, skipped = cluster_and_filter(
+        [item],
+        existing_ids=set(),
+        existing_nids={"167537"},
+        existing_endpoints=set()
+    )
+    assert len(filtered) == 0
+    assert len(skipped) == 1
+    assert "NID 167537 已於既有目錄收錄" in skipped[0]["reason"]
+
+    # 情境 2: 端點 URL 已經在既有目錄指紋中
+    filtered_ep, skipped_ep = cluster_and_filter(
+        [item],
+        existing_ids=set(),
+        existing_nids=set(),
+        existing_endpoints={"https://opendata.immigration.gov.tw/apis/tpe11"}
+    )
+    assert len(filtered_ep) == 0
+    assert len(skipped_ep) == 1
+    assert "端點 URL 已於既有目錄收錄" in skipped_ep[0]["reason"]
+

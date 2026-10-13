@@ -49,8 +49,30 @@
 
 - **時效性與過期政策稽核 (Freshness Audit)**：
   - 目前 59 筆條目之 `last_reviewed_at` 均在 2026-10-13 至 2026-10-14 期間，無超過 365 天之過期紀錄。
-  - 所有標記 `endpoint_tested` 之條目均附帶有效之 `last_endpoint_tested_at` 日期。
+  - 所有標記 `endpoint_tested` 之條目均附帶有效之 `last_endpoint_tested_at` 日期，且實測日期未超過 90 天有效警戒期。
 
+---
+
+### 1.5 候選草稿真實性治理與指紋去重 (Candidate Truthfulness & Deduplication)
+為落實「拒絕將未知偽裝為已知」與「資料工程可信度」要求，專案於本次版本完成了以下關鍵治理改進：
+
+1. **候選未知欄位真確化 (Truthful Unknowns)**：
+   - 修正掃描器自動填入臆測值之缺陷。對於未經實地探測或未獲取明確授權條款之 candidate 草稿，其 `service_status`、`commercial_use`、`access_tier`、`auth_type`、`api_style` 一律客觀標記為 `unknown`。
+   - 追溯校正既有 16 筆 candidate YAML，確保 downstream 系統不會誤將候選條目當作 active 或 free 服務使用。
+
+2. **三維指紋去重防護 (Three-Dimensional Fingerprint Deduplication)**：
+   - 掃描器不再僅以 ID 比對，而是動態提取既有目錄之三組指紋集合：
+     * **條目 ID** (`existing_ids`)
+     * **開放平台 NID** (`existing_nids`，從 sources 與 website_url 正規解析)
+     * **端點與文件 URL** (`existing_endpoints`)
+   - 杜絕以 `gov-tw-nid-{nid}` 格式重複生成已在正式目錄中收錄之相同服務。
+
+3. **雙軌時效性規則 (Dual-Track Freshness Policy)**：
+   - 驗證器嚴格檢查 `last_reviewed_at`（365 天中繼資料過期警告）與 `last_endpoint_tested_at`（90 天實測過期降級提醒）。
+   - 日期格式非標準 `YYYY-MM-DD` 時強制報錯，確保資料結構嚴謹性。
+
+4. **下游三階消費閉環 (Three-Tier Consumer Pipeline Closure)**：
+   - 消費端範例 (`examples/real_estate_research_consumer.py`) 實作三階分流 (`eligible_for_ingestion` / `requires_review` / `excluded`)，並實際調用真實 API 端點，產出結構化之 `SiteRiskAssessment` 模型。
 
 ---
 

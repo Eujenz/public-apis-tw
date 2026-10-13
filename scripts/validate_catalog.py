@@ -102,15 +102,29 @@ def validate_entry(
 
     # 4. 時效性與過期政策 (Freshness check)
     ref_date = datetime.strptime(today_date, "%Y-%m-%d").date() if today_date else datetime.now(timezone.utc).date()
+    
+    # 4.1 中繼資料審核時效檢查
     if last_reviewed:
         try:
             rev_date = datetime.strptime(last_reviewed, "%Y-%m-%d").date()
             if (ref_date - rev_date).days > 365:
-                warnings.append(f"此條目上次審查時間 ({last_reviewed}) 已超過 365 天，建議重新核驗")
+                warnings.append(f"此條目上次文件審查時間 ({last_reviewed}) 已超過 365 天，中繼資料可能過期，建議重新核驗")
         except ValueError:
-            pass
+            errors.append(f"last_reviewed_at 日期格式無效: '{last_reviewed}' (必須為 YYYY-MM-DD)")
+
+    # 4.2 端點連線實測時效檢查 (90 天)
+    if last_endpoint_tested:
+        try:
+            test_date = datetime.strptime(last_endpoint_tested, "%Y-%m-%d").date()
+            if (ref_date - test_date).days > 90:
+                warnings.append(
+                    f"此條目上次端點實測時間 ({last_endpoint_tested}) 已超過 90 天，僅代表歷史實測記錄，建議排程重新檢測連線存活性"
+                )
+        except ValueError:
+            errors.append(f"last_endpoint_tested_at 日期格式無效: '{last_endpoint_tested}' (必須為 YYYY-MM-DD)")
 
     return errors, warnings
+
 
 def validate_catalog(
     data_dir: Path | None = None,

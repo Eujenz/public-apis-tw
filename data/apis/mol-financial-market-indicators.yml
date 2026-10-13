@@ -9,13 +9,13 @@ docs_url: https://data.gov.tw/dataset/30815
 website_url: https://data.gov.tw/dataset/30815
 base_url: https://apiservice.mol.gov.tw/OdService/rest/datastore/A17030000J-000037-l9P
 api_style: REST
-auth_type: none
+auth_type: unknown
 access_tier: free
 https_support: 'yes'
 cors_support: unknown
 license_name: OGDL-Taiwan-1.0
 commercial_use: allowed
-service_status: active
+service_status: unknown
 review_status: candidate
 verification_level: none
 last_reviewed_at: '2026-10-14'
