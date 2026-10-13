@@ -175,7 +175,7 @@
       "https://data.moa.gov.tw",
       "https://data.gov.tw/dataset/8910"
     ],
-    "notes": "可藉由作物代碼或作物名稱查詢全台批發均價與交易總量。經端點實測返回 200 JSON 且帶有 Access-Control-Allow-Origin: *。"
+    "notes": "可藉由作物代碼或作物名稱查詢全台批發均價與交易總量。於 2026-10-13 以 HTTP GET 實測端點返回 200 JSON 且帶有 Access-Control-Allow-Origin: *。"
   },
   {
     "id": "moea-gcis-company",
@@ -210,7 +210,7 @@
     "sources": [
       "https://data.gcis.nat.gov.tw/od/rule"
     ],
-    "notes": "可藉由統一編號查詢公司登記現況。經端點實測返回 200 JSON；伺服器未啟用 CORS 標頭，前端瀏覽器需由後端轉發。"
+    "notes": "可藉由統一編號查詢公司登記現況。於 2026-10-13 以 HTTP GET 實測端點返回 200 JSON；伺服器未啟用 CORS 標頭，前端瀏覽器需由後端轉發。"
   },
   {
     "id": "moenv-air-quality",
@@ -390,7 +390,7 @@
       "https://maps.nlsc.gov.tw/S09SOA/",
       "https://wmts.nlsc.gov.tw/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0"
     ],
-    "notes": "支援 OGC WMTS 標準 GetCapabilities 與 GetTile 操作。經測試回傳 HTTP 200 與 Access-Control-Allow-Origin: *。"
+    "notes": "支援 OGC WMTS 標準 GetCapabilities 與 GetTile 操作。於 2026-10-13 以 HTTP GET 實測回傳 HTTP 200 與 Access-Control-Allow-Origin: *。"
   },
   {
     "id": "taipei-opendata-portal",
@@ -425,7 +425,7 @@
       "https://data.taipei",
       "https://data.taipei/dataset/detail?id=c627670e-1ef6-43cb-9351-5b74c053c713"
     ],
-    "notes": "台北市即時停車格與公車到站資訊被各類地圖導航應用採用。經端點實測返回 200 JSON；Access-Control-Allow-Origin 限制為 https://data.taipei，外部跨域存取需後端代理。"
+    "notes": "台北市即時停車格與公車到站資訊被各類地圖導航應用採用。於 2026-10-13 以 HTTP GET 實測端點返回 200 JSON；Access-Control-Allow-Origin 限制為 https://data.taipei，外部跨域存取需後端代理。"
   },
   {
     "id": "taipower-power-status",
@@ -460,7 +460,7 @@
       "https://www.taipower.com.tw",
       "https://service.taipower.com.tw/data/opendata/apply/file/d006001/001.json"
     ],
-    "notes": "端點經實測返回 200 JSON（包含各機組最新發電與淨發購電數據）。未開啟 CORS 跨域標頭，瀏覽器前端調用需透過後端轉發。"
+    "notes": "端點於 2026-10-13 以 HTTP GET 實測返回 200 JSON（包含各機組最新發電與淨發購電數據）。未開啟 CORS 跨域標頭，瀏覽器前端調用需透過後端轉發。"
   },
   {
     "id": "tbroc-tourism",
@@ -671,7 +671,7 @@
       "https://openapi.twse.com.tw/",
       "https://data.gov.tw/dataset/11549"
     ],
-    "notes": "提供上市每日收盤行情與上市公司基本資訊。經端點實測返回 200 JSON；伺服器未啟用 CORS 標頭，前端瀏覽器存取需由後端代理轉發。"
+    "notes": "提供上市每日收盤行情與上市公司基本資訊。於 2026-10-13 以 HTTP GET 實測端點返回 200 JSON；伺服器未啟用 CORS 標頭，前端瀏覽器存取需由後端代理轉發。"
   },
   {
     "id": "wra-water-resources",

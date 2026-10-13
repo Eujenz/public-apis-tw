@@ -28,4 +28,4 @@ last_endpoint_tested_at: "2026-10-13"
 sources:
   - "https://maps.nlsc.gov.tw/S09SOA/"
   - "https://wmts.nlsc.gov.tw/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0"
-notes: "支援 OGC WMTS 標準 GetCapabilities 與 GetTile 操作。經測試回傳 HTTP 200 與 Access-Control-Allow-Origin: *。"
+notes: "支援 OGC WMTS 標準 GetCapabilities 與 GetTile 操作。於 2026-10-13 以 HTTP GET 實測回傳 HTTP 200 與 Access-Control-Allow-Origin: *。"

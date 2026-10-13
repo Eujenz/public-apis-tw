@@ -7,22 +7,43 @@
 
 ---
 
-## 1. 稽核總覽與統計摘要
+## 1. 稽核總覽與統計定義
 
-- **受稽核總筆數**: 20 筆
-- **稽核結果分佈**:
-  - `PASS` (符合規範且資訊精確): **11 筆**
-  - `FIX_REQUIRED` (已明確定位錯誤並完成修正修正): **6 筆**
-  - `UNVERIFIED` / `needs_review` (核心依據不足或端點待官方釐清，調降狀態): **2 筆** (`cdc-surveillance-opendata`, `nhi-medical-institutions`)
-  - `EXCLUDE` (不符收錄標準已自目錄排除並替換): **1 筆** (`taiwan-post-zipcode` 虛構社群專案，已剔除並替換為官方正式 `chunghwa-post-zip33`)
-- **審查狀態分佈 (Review Status)**:
-  - `verified`: 16 筆
-  - `needs_review`: 2 筆
-  - `candidate`: 2 筆 (`dgpa-work-class-cancel`, `tw-air-quality-history`)
-- **查核等級分佈 (Verification Level)**:
-  - `endpoint_tested`: 5 筆 (經安全、免認證之 HTTP GET/OPTIONS 請求實測端點與 CORS)
-  - `docs_reviewed`: 14 筆
-  - `none`: 1 筆
+### 1.1 稽核結果定義 (Audit Outcomes Definition)
+- **`PASS`**：該紀錄完全符合專案收錄與客觀真實性規範，欄位屬性（來源、文件、驗證方式）與官方宣告相符。
+- **`FIX_REQUIRED`**：紀錄所指向之官方服務真實存在，但原登載之技術細節（如 docs_url 404/重新導向、CORS 錯誤假設、base_url 缺漏或 OpenAPI 格式歸類）存在明確錯誤，已透過官方技術依據完成修復。
+- **`UNVERIFIED`**：現有公開資訊不足以佐證其為穩定公開之可程式化 API（如原網址 500/連線超時、主機無 DNS 解析、官方僅有靜態批次檔案），已相應調降其審查狀態為 `needs_review` 或 `candidate`，不列入正式目錄主表。
+- **`EXCLUDE`**：該紀錄指向不存在之虛構網址或未公開專案，嚴重違反收錄政策，已徹底自版本庫中刪除排除。
+
+---
+
+### 1.2 初始 20 筆資料集之稽核判定統計 (Initial 20 Datasets Audit)
+針對專案初始建立的 20 筆 API 定義檔逐一進行事實查核，判定如下：
+- **`PASS`**：**11 筆** (`cwa-opendata`, `moenv-air-quality`, `tdx-transportation`, `tpex-openapi`, `mof-einvoice`, `tbroc-tourism`, `moa-agri-trans`, `tw-air-quality-history` 等)
+- **`FIX_REQUIRED`**：**6 筆** (`moea-gcis-company`, `twse-openapi`, `nlsc-map-api`, `tgos-geocoder`, `ncdr-cap-disaster`, `taipower-power-status`, `taipei-opendata-portal` 等修正)
+- **`UNVERIFIED`**：**2 筆** (`cdc-surveillance-opendata`, `nhi-medical-institutions` 降為 needs_review；`dgpa-work-class-cancel` 降為 candidate)
+- **`EXCLUDE`**：**1 筆** (`taiwan-post-zipcode` 因網址與專案不存在，確認排除移除)
+
+---
+
+### 1.3 資料異動與項目替換說明 (Dataset Mutation & Replacement)
+- **移除項目 (Excluded)**：`taiwan-post-zipcode`（原宣稱之社群 GitHub 專案與端點經查核不存在，已自版本庫移除）。
+- **新增替換項目 (Added Replacement)**：`chunghwa-post-zip33`（中華郵政官方正式營運之 3+3 郵遞區號 SOAP Web Service，獨立官方來源查核通過，端點實測 200）。
+
+---
+
+### 1.4 最終 20 筆資料集之狀態分佈 (Final 20 Datasets Distribution)
+完成上述修正、降級與替換後，目前版本庫內 20 筆 API 的審查與驗證狀態分佈如下：
+
+- **審查狀態分佈 (`review_status`)**：
+  - `verified`（已審核通過，列入正式目錄主表）：**16 筆**
+  - `needs_review`（待官方或維護者進一步查核，列入附錄）：**2 筆** (`cdc-surveillance-opendata`, `nhi-medical-institutions`)
+  - `candidate`（候選待審項目，列入附錄）：**2 筆** (`dgpa-work-class-cancel`, `tw-air-quality-history`)
+
+- **技術查核等級分佈 (`verification_level`)**：
+  - `endpoint_tested`（於 2026-10-13 以安全 HTTP GET/OPTIONS 請求實測通過）：**5 筆** (`moa-agri-trans`, `moea-gcis-company`, `nlsc-map-api`, `taipower-power-status`, `twse-openapi`)
+  - `docs_reviewed`（依官方技術文件核實）：**14 筆**
+  - `none`（未經查核，候選項目）：**1 筆** (`tw-air-quality-history`)
 
 ---
 

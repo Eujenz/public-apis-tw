@@ -32,7 +32,6 @@
 | **國家災害防救科技中心 (NCDR) 示警公開資料 API**<br>`NCDR Common Alerting Protocol (CAP) Disaster Warning API` | 國家災害防救科技中心 (NCDR) | 彙整中央氣象署、水利署、農村水保署、公路局等跨部會之天然災害（颱風、豪雨、土石流、地震）標準 CAP 示警訊號。 | `REST` | `api_key` | `free` | `yes` | `unknown` | `OGDL-Taiwan-1.0` | [文件連結](https://alerts.ncdr.nat.gov.tw/api_swagger/swagger.json) | `docs_reviewed` |
 | **台北市政府資料開放平台 API**<br>`Taipei City OpenData DataStore API` | 台北市政府資訊局 | 台北市政府資料大平台提供之資料集查詢、即時路況、停車場即時剩餘車位等 RESTful 介面。 | `REST` | `none` | `free` | `yes` | `no` | `OGDL-Taiwan-1.0` | [文件連結](https://data.taipei/dataset/detail?id=c627670e-1ef6-43cb-9351-5b74c053c713) | `endpoint_tested` |
 | **台灣電力公司今日發電與電力供需資訊 API**<br>`Taipower Real-Time Electricity Generation & Supply API` | 台灣電力公司 | 提供台灣全島即時各機組發電量、能源類型佔比、當日用電曲線及供電備轉容量率。 | `REST` | `none` | `free` | `yes` | `no` | `OGDL-Taiwan-1.0` | [文件連結](https://www.taipower.com.tw) | `endpoint_tested` |
-
 ## 商業登記與金融財經 (Finance & Business)
 
 | API 名稱 | 提供者 | 簡介 | 類型 | 驗證機制 | 費用層級 | HTTPS | CORS | 上游授權 | 官方文件 | 查核等級 |
@@ -42,7 +41,6 @@
 | **財政部電子發票整合服務平台 API**<br>`MOF E-Invoice Open API` | 財政部財政資訊中心 | 提供電子發票中獎號碼開獎結果、載具發票表頭/明細查詢、營業人統編字軌有效性及捐贈碼查驗。 | `REST` | `api_key` | `free` | `yes` | `unknown` | `OGDL-Taiwan-1.0` | [文件連結](https://www.einvoice.nat.gov.tw/APCONSUMER/BTC501W/) | `docs_reviewed` |
 | **證券櫃檯買賣中心 OpenAPI**<br>`Taipei Exchange (TPEx) OpenAPI` | 證券櫃檯買賣中心 (TPEx) | 提供上櫃股票行情、興櫃股票交易資訊、公債市場與外幣計價債券每日統計之 OpenAPI 介面。 | `REST` | `none` | `free` | `yes` | `unknown` | `OGDL-Taiwan-1.0` | [文件連結](https://www.tpex.org.tw/openapi/) | `docs_reviewed` |
 | **台灣證券交易所 OpenAPI**<br>`Taiwan Stock Exchange (TWSE) OpenAPI` | 臺灣證券交易所 (TWSE) | 提供集中交易市場每日收盤行情、個股本益比/殖利率、除權息公告、大盤指數與上市基本資訊之 OpenAPI 介面。 | `REST` | `none` | `free` | `yes` | `no` | `OGDL-Taiwan-1.0` | [文件連結](https://openapi.twse.com.tw/) | `endpoint_tested` |
-
 ## 天氣與環境水情 (Weather & Environment)
 
 | API 名稱 | 提供者 | 簡介 | 類型 | 驗證機制 | 費用層級 | HTTPS | CORS | 上游授權 | 官方文件 | 查核等級 |
@@ -50,26 +48,22 @@
 | **中央氣象署開放資料平台 API**<br>`CWA OpenData API` | 交通部中央氣象署 | 提供台灣氣象預報、即時天氣觀測、地震資訊與警報、氣象雷達及颱風警報資料之 RESTful 介面。 | `REST` | `api_key` | `free` | `yes` | `unknown` | `OGDL-Taiwan-1.0` | [文件連結](https://opendata.cwa.gov.tw/dist/opendata-swagger.html) | `docs_reviewed` |
 | **環境部空氣品質監測 API**<br>`MOENV Air Quality API` | 環境部 | 提供全台各地測站即時空氣品質指標 (AQI)、PM2.5、PM10、臭氧及詳細大氣濃度數據。 | `REST` | `api_key` | `free` | `yes` | `unknown` | `OGDL-Taiwan-1.0` | [文件連結](https://data.moenv.gov.tw/swagger/) | `docs_reviewed` |
 | **經濟部水利署水情與水利開放資料 API**<br>`WRA Water Resources Open Data & FHY API` | 經濟部水利署 | 提供水庫蓄水量、水情燈號、全台河川水位、淹水感測警戒與雨量站觀測數據。 | `REST` | `api_key` | `free` | `yes` | `unknown` | `OGDL-Taiwan-1.0` | [文件連結](https://opendata.wra.gov.tw) | `docs_reviewed` |
-
 ## 交通與運輸 (Transportation)
 
 | API 名稱 | 提供者 | 簡介 | 類型 | 驗證機制 | 費用層級 | HTTPS | CORS | 上游授權 | 官方文件 | 查核等級 |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :--- | :---: |
 | **交通部運輸資料流通服務 (TDX)**<br>`Transport Data eXchange (TDX)` | 交通部 | 整合台灣軌道 (台鐵/高鐵/捷運)、公路客運、市區公車、公共自行車 (YouBike) 與航空船舶之全國即時動態與靜態路網資料。 | `REST` | `api_key` | `free` | `yes` | `unknown` | `OGDL-Taiwan-1.0` | [文件連結](https://tdx.transportdata.tw/api-service/swagger) | `docs_reviewed` |
-
 ## 地理資訊與國土測繪 (Maps & Geospatial)
 
 | API 名稱 | 提供者 | 簡介 | 類型 | 驗證機制 | 費用層級 | HTTPS | CORS | 上游授權 | 官方文件 | 查核等級 |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :--- | :---: |
 | **國土測繪圖資服務雲 WMTS API**<br>`NLSC Web Map Tile Service (WMTS) API` | 內政部國土測繪中心 | 提供台灣全島通用版電子地圖、正射影像圖、國土利用現況圖及村里行政界線等 OGC WMTS 圖磚服務。 | `OGC Web Services` | `none` | `free` | `yes` | `yes` | `OGDL-Taiwan-1.0` | [文件連結](https://maps.nlsc.gov.tw/S09SOA/) | `endpoint_tested` |
 | **TGOS 全國門牌地址定位與地圖 API**<br>`TGOS Address Geocoding & Map API` | 內政部資訊服務司 / 國土測繪圖資雲 | 內政部地理資訊圖資雲服務平台提供之門牌地址定位 (Geocoding)、坐標反查與地圖前端元件服務。 | `REST` | `api_key` | `free_tier` | `yes` | `unknown` | `OGDL-Taiwan-1.0` | [文件連結](https://api.tgos.tw/) | `docs_reviewed` |
-
 ## 文化與觀光 (Culture & Tourism)
 
 | API 名稱 | 提供者 | 簡介 | 類型 | 驗證機制 | 費用層級 | HTTPS | CORS | 上游授權 | 官方文件 | 查核等級 |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :--- | :---: |
 | **交通部觀光署觀光資訊 OpenAPI**<br>`Taiwan Tourism Administration OpenData API` | 交通部觀光署 | 提供台灣全島景點、觀光活動、合法旅宿、在地餐飲與自行車道之即時活動與點位資料。 | `REST` | `api_key` | `free` | `yes` | `unknown` | `OGDL-Taiwan-1.0` | [文件連結](https://tdx.transportdata.tw/api-service/swagger) | `docs_reviewed` |
-
 ## 教育與學術研究 (Education & Research)
 
 *目前此分類尚無已審核通過之項目。*
@@ -85,3 +79,16 @@
 ## 其他開放服務 (Other)
 
 *目前此分類尚無已審核通過之項目。*
+
+---
+
+## 附錄：待覆核與候選中項目 (Pending & Candidates)
+
+> ⚠️ **注意**：以下項目尚未完成官方文件核實或端點測試，**未列入上方正式目錄主表**。僅供社群追蹤與後續查核。
+
+| API 名稱 | 提供者 | 分類 | 審查狀態 | 說明與待辦備註 |
+| :--- | :--- | :--- | :---: | :--- |
+| **疾病管制署傳染病統計資料 API**<br>`Taiwan CDC Infectious Disease Surveillance API` | 衛生福利部疾病管制署 | Healthcare & Public Health | `needs_review` | 原登載之 `/applications/api` 端點返回 404 且自簽憑證異常；疾管署資料開放平台主要提供各傳染病固定 JSON/CSV 資源，特定資料集支援 CKAN Datastore API，待完成全面盤點與端點重測後再提升至 verified。 |
+| **人事行政總處天然災害停止上班及上課資訊 (歷次統計)**<br>`DGPA Disaster Work & School Cancellation Dataset` | 行政院人事行政總處 (DGPA) | Government & Public Services | `candidate` | 原登載之 data.gov.tw/dataset/26777 回應 500 且 base_url `/nds/opendata` 超時無法連線。人事行政總處官方即時公告多為網頁發布 (NDS HTML) 或歷次統計 CSV，缺乏官方長期維護之穩定公開 REST API 端點，保留為候選項目待確認。 |
+| **健保署特約醫療院所名冊資料集 (含介接)**<br>`NHI Contracted Medical Facilities Dataset` | 衛生福利部中央健康保險署 | Healthcare & Public Health | `needs_review` | 原登載之 dataset/21008 為急難救助基金之錯誤 ID，正確資料集為 168341；原登載之 data.nhi.gov.tw 主機已無法解析 DNS。健保署目前主要透過政府資料開放平台提供定期更新之 CSV/JSON 檔案與平台介接端點，待核實即時 API 規格後再提升至 verified。 |
+| **台灣空氣品質歷史資料檢索 API (候選)**<br>`Taiwan Air Quality Historical Dataset API (Candidate)` | 環境部 | Weather & Environment | `candidate` | 歷史大量資料通常拆分為年別壓縮檔，API 僅支援小範圍分頁查詢，待完整評估後再決定是否升級為 verified。 |

@@ -3,11 +3,11 @@
 > 🇹🇼 A curated directory of APIs for building products in Taiwan.  
 > 專為台灣開發者打造之公共與開放 API 精選目錄。
 
-[![CI](https://github.com/public-apis-tw/public-apis-tw/actions/workflows/ci.yml/badge.svg)](https://github.com/public-apis-tw/public-apis-tw/actions/workflows/ci.yml)
+[![CI](https://github.com/Eujenz/public-apis-tw/actions/workflows/ci.yml/badge.svg)](https://github.com/Eujenz/public-apis-tw/actions/workflows/ci.yml)
 [![Code License: MIT](https://img.shields.io/badge/Code%20License-MIT-yellow.svg)](LICENSE-CODE)
 [![Catalog Data: CC BY 4.0](https://img.shields.io/badge/Catalog%20Data-CC%20BY%204.0-lightgrey.svg)](LICENSE-DATA)
 
-> 💡 **專案狀態說明**：本專案剛完成架構與第一版規格實作。上方 CI 徽章將在遠端 GitHub Repository 正式建立並推送後啟動運作。
+> 💡 **專案狀態說明**：本專案遠端目標倉庫為 `Eujenz/public-apis-tw`。
 
 ---
 
@@ -24,9 +24,10 @@
 
 ## 📖 完整目錄與資料檔案
 
-- **結構化 Markdown 目錄**：請查閱 [📑 docs/catalog.md](docs/catalog.md) 查看依領域分類整理之完整表格。
-- **機器可讀 JSON 檔案**：建置產出之全量資料位於 [📦 dist/apis.json](dist/apis.json)（納入版本庫追蹤）。
+- **結構化 Markdown 目錄**：請查閱 [📑 docs/catalog.md](docs/catalog.md) 查看僅包含正式收錄（`verified`）項目的完整分類表格。
+- **機器可讀 JSON 檔案**：建置產出之全量資料位於 [📦 dist/apis.json](dist/apis.json)（納入版本庫追蹤，包含各條目的審查狀態與技術屬性）。
 - **原始資料庫**：每一筆 API 均以單一 YAML 檔案獨立維護於 [📁 data/apis/](data/apis/) 目錄中。
+- **品質稽核報告**：各 API 之事實查核、端點實測與修正紀錄請參閱 [📝 docs/data-quality-audit.md](docs/data-quality-audit.md)。
 
 ---
 

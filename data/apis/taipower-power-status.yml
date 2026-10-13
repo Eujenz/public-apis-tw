@@ -28,4 +28,4 @@ last_endpoint_tested_at: "2026-10-13"
 sources:
   - "https://www.taipower.com.tw"
   - "https://service.taipower.com.tw/data/opendata/apply/file/d006001/001.json"
-notes: "端點經實測返回 200 JSON（包含各機組最新發電與淨發購電數據）。未開啟 CORS 跨域標頭，瀏覽器前端調用需透過後端轉發。"
+notes: "端點於 2026-10-13 以 HTTP GET 實測返回 200 JSON（包含各機組最新發電與淨發購電數據）。未開啟 CORS 跨域標頭，瀏覽器前端調用需透過後端轉發。"

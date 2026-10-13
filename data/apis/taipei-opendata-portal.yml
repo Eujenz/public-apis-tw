@@ -28,4 +28,4 @@ last_endpoint_tested_at: "2026-10-13"
 sources:
   - "https://data.taipei"
   - "https://data.taipei/dataset/detail?id=c627670e-1ef6-43cb-9351-5b74c053c713"
-notes: "台北市即時停車格與公車到站資訊被各類地圖導航應用採用。經端點實測返回 200 JSON；Access-Control-Allow-Origin 限制為 https://data.taipei，外部跨域存取需後端代理。"
+notes: "台北市即時停車格與公車到站資訊被各類地圖導航應用採用。於 2026-10-13 以 HTTP GET 實測端點返回 200 JSON；Access-Control-Allow-Origin 限制為 https://data.taipei，外部跨域存取需後端代理。"

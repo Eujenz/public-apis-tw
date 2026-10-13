@@ -29,4 +29,4 @@ last_endpoint_tested_at: "2026-10-13"
 sources:
   - "https://data.moa.gov.tw"
   - "https://data.gov.tw/dataset/8910"
-notes: "可藉由作物代碼或作物名稱查詢全台批發均價與交易總量。經端點實測返回 200 JSON 且帶有 Access-Control-Allow-Origin: *。"
+notes: "可藉由作物代碼或作物名稱查詢全台批發均價與交易總量。於 2026-10-13 以 HTTP GET 實測端點返回 200 JSON 且帶有 Access-Control-Allow-Origin: *。"

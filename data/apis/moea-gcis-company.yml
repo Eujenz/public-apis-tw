@@ -28,4 +28,4 @@ last_reviewed_at: "2026-10-13"
 last_endpoint_tested_at: "2026-10-13"
 sources:
   - "https://data.gcis.nat.gov.tw/od/rule"
-notes: "可藉由統一編號查詢公司登記現況。經端點實測返回 200 JSON；伺服器未啟用 CORS 標頭，前端瀏覽器需由後端轉發。"
+notes: "可藉由統一編號查詢公司登記現況。於 2026-10-13 以 HTTP GET 實測端點返回 200 JSON；伺服器未啟用 CORS 標頭，前端瀏覽器需由後端轉發。"

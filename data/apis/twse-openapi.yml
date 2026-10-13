@@ -30,4 +30,4 @@ last_endpoint_tested_at: "2026-10-13"
 sources:
   - "https://openapi.twse.com.tw/"
   - "https://data.gov.tw/dataset/11549"
-notes: "提供上市每日收盤行情與上市公司基本資訊。經端點實測返回 200 JSON；伺服器未啟用 CORS 標頭，前端瀏覽器存取需由後端代理轉發。"
+notes: "提供上市每日收盤行情與上市公司基本資訊。於 2026-10-13 以 HTTP GET 實測端點返回 200 JSON；伺服器未啟用 CORS 標頭，前端瀏覽器存取需由後端代理轉發。"

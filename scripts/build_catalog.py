@@ -117,6 +117,26 @@ def generate_markdown(apis):
             )
             lines.append(row)
 
+    # 獨立呈現待重新覆核 (needs_review) 與候選 (candidate) 項目
+    pending_items = [api for api in apis if api.get("review_status") in ("needs_review", "candidate")]
+    if pending_items:
+        lines.append("---")
+        lines.append("")
+        lines.append("## 附錄：待覆核與候選中項目 (Pending & Candidates)")
+        lines.append("")
+        lines.append("> ⚠️ **注意**：以下項目尚未完成官方文件核實或端點測試，**未列入上方正式目錄主表**。僅供社群追蹤與後續查核。")
+        lines.append("")
+        lines.append("| API 名稱 | 提供者 | 分類 | 審查狀態 | 說明與待辦備註 |")
+        lines.append("| :--- | :--- | :--- | :---: | :--- |")
+        for item in pending_items:
+            name_display = f"**{item['name_zh']}**"
+            if item.get("name_en"):
+                name_display += f"<br>`{item['name_en']}`"
+            provider = item["provider"]
+            cat = item.get("category", "")
+            status = item.get("review_status", "")
+            notes = item.get("notes", item.get("description_zh", ""))
+            lines.append(f"| {name_display} | {provider} | {cat} | `{status}` | {notes} |")
         lines.append("")
 
     return "\n".join(lines)
