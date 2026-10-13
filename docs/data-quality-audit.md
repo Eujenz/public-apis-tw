@@ -41,9 +41,9 @@
   - `candidate`（候選待審項目，列入附錄）：**2 筆** (`dgpa-work-class-cancel`, `tw-air-quality-history`)
 
 - **技術查核等級分佈 (`verification_level`)**：
-  - `endpoint_tested`（於 2026-10-13 以安全 HTTP GET/OPTIONS 請求實測通過）：**5 筆** (`moa-agri-trans`, `moea-gcis-company`, `nlsc-map-api`, `taipower-power-status`, `twse-openapi`)
-  - `docs_reviewed`（依官方技術文件核實）：**14 筆**
-  - `none`（未經查核，候選項目）：**1 筆** (`tw-air-quality-history`)
+  - `endpoint_tested`（於 2026-10-13 以安全 HTTP GET/OPTIONS 請求實測端點與 CORS 通過，且均填有 `last_endpoint_tested_at`）：**6 筆** (`moa-agri-trans`, `moea-gcis-company`, `nlsc-map-api`, `taipei-opendata-portal`, `taipower-power-status`, `twse-openapi`)
+  - `docs_reviewed`（依官方技術文件核實）：**12 筆** (`cdc-surveillance-opendata`, `chunghwa-post-zip33`, `cwa-opendata`, `moenv-air-quality`, `mof-einvoice`, `ncdr-cap-disaster`, `nhi-medical-institutions`, `tbroc-tourism`, `tdx-transportation`, `tgos-geocoder`, `tpex-openapi`, `wra-water-resources`)
+  - `none`（未經查核，候選項目）：**2 筆** (`dgpa-work-class-cancel`, `tw-air-quality-history`)
 
 ---
 
