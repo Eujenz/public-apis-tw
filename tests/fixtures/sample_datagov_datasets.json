@@ -1,0 +1,62 @@
+[
+  {
+    "nid": 6239,
+    "title": "國民中學校別資料 (純檔案)",
+    "agency_name": "教育部統計處",
+    "all_file_format_name": ["CSV", "JSON"],
+    "all_url": [
+      "https://stats.moe.gov.tw/files/opendata/base2.csv",
+      "https://stats.moe.gov.tw/files/opendata/base2.json"
+    ],
+    "all_oas_url": null,
+    "api_doc_url": []
+  },
+  {
+    "nid": 137993,
+    "title": "公共自行車即時資訊 (純blob靜態檔案)",
+    "agency_name": "臺北市政府交通局",
+    "all_file_format_name": ["JSON"],
+    "all_url": [
+      "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json"
+    ],
+    "all_oas_url": null,
+    "api_doc_url": []
+  },
+  {
+    "nid": 167537,
+    "title": "桃園機場第一航廈入境人次預報 (真實API)",
+    "agency_name": "內政部移民署",
+    "all_file_format_name": ["API"],
+    "all_url": [
+      "https://opendata.immigration.gov.tw/APIS/TPE11"
+    ],
+    "all_oas_url": null,
+    "api_doc_url": [],
+    "field_description": "提供桃園機場第一航廈逐時入境人次預報之即時查詢端點。"
+  },
+  {
+    "nid": 161479,
+    "title": "安平港國際郵輪船期預報表 (真實OpenAPI/端點)",
+    "agency_name": "臺灣港務股份有限公司",
+    "all_file_format_name": ["API"],
+    "all_url": [
+      "https://tpapim-es.twport.com.tw:8065/v1.0/TcsNetOpenApi/GetForecastData?fid=71"
+    ],
+    "all_oas_url": null,
+    "api_doc_url": ["https://tpapim-es.twport.com.tw:8065/swagger/index.html"],
+    "field_description": "提供安平港國際郵輪船期預報資料查詢。"
+  },
+  {
+    "nid": 6624,
+    "title": "勞工體格及健康檢查認可醫療機構 (真實Datastore)",
+    "agency_name": "勞動部職業安全衛生署",
+    "all_file_format_name": ["WEBSERVICES", "CSV"],
+    "all_url": [
+      "https://apiservice.mol.gov.tw/OdService/download/A17000000J-020057-FyT",
+      "https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-020057-Nvt"
+    ],
+    "all_oas_url": null,
+    "api_doc_url": [],
+    "field_description": "提供勞工體格及健康檢查認可醫療機構清冊與查詢端點。"
+  }
+]

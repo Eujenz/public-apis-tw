@@ -35,11 +35,16 @@ def slugify(text: str) -> str:
     return slug or "unknown-api"
 
 def infer_auth_type(spec: dict) -> str:
-    """從 OpenAPI / Swagger 規格中推斷身份驗證類型"""
+    """
+    從 OpenAPI / Swagger 規格中推斷身份驗證類型。
+    注意：規格中存在 securitySchemes 不代表所有端點都強制驗證；
+    若無任何 securitySchemes/securityDefinitions 宣告，回傳 'none'；
+    若有宣告但無法確定全域強制性，保留啟發式判斷，無法判定時回傳 'unknown'。
+    """
     security_defs = spec.get("securityDefinitions") or spec.get("components", {}).get("securitySchemes", {})
     if not security_defs:
         return "none"
-    
+
     types = []
     for s_name, s_val in security_defs.items():
         stype = s_val.get("type", "").lower()
@@ -55,7 +60,7 @@ def infer_auth_type(spec: dict) -> str:
                 types.append("other")
         else:
             types.append("other")
-    
+
     if "api_key" in types:
         return "api_key"
     if "oauth" in types:
@@ -65,27 +70,53 @@ def infer_auth_type(spec: dict) -> str:
     return "unknown"
 
 def infer_formats(spec: dict) -> list[str]:
+    """
+    檢查規格中的資料傳輸格式。
+    注意：找不到任何 JSON 或 XML 明確宣告時，回傳空串列 []，避免將「未知」默認為「已知」。
+    """
     formats = set()
     produces = spec.get("produces", [])
     consumes = spec.get("consumes", [])
     all_types = " ".join(produces + consumes).lower()
+    
+    # 檢查 paths 中的 content-type
+    paths = spec.get("paths", {})
+    for path_data in paths.values():
+        if isinstance(path_data, dict):
+            for method_data in path_data.values():
+                if isinstance(method_data, dict):
+                    responses = method_data.get("responses", {})
+                    for resp_code, resp_data in responses.items():
+                        if isinstance(resp_data, dict):
+                            content = resp_data.get("content", {})
+                            for ct in content.keys():
+                                all_types += " " + ct.lower()
+
     if "json" in all_types:
         formats.add("JSON")
     if "xml" in all_types:
         formats.add("XML")
-    if not formats:
-        formats.add("JSON")
+    if "csv" in all_types:
+        formats.add("CSV")
+
     return sorted(list(formats))
 
-def extract_base_url(spec: dict, doc_url: str) -> str:
+def extract_base_url(spec: dict, doc_url: str) -> str | None:
+    """
+    提取 API 伺服器主機 Base URL。
+    重要原則：若規格中沒有明確伺服器資訊，嚴禁退回文件網站網域，應回傳 None，避免將文件主機誤判為 API 端點。
+    """
     # OpenAPI 3.x
     servers = spec.get("servers", [])
     if servers and isinstance(servers, list):
-        first_url = servers[0].get("url", "")
-        if first_url.startswith("http"):
-            return first_url
-        parsed = urlparse(doc_url)
-        return f"{parsed.scheme}://{parsed.netloc}{first_url}".rstrip("/")
+        for s in servers:
+            u = s.get("url", "")
+            if u.startswith("http://") or u.startswith("https://"):
+                return u.rstrip("/")
+            # 若為相對路徑且非空，且能確定是 API path
+            if u.startswith("/"):
+                # 相對路徑暫無法確定真實 API 主機，不盲目拼接
+                pass
 
     # Swagger 2.0
     host = spec.get("host")
@@ -95,8 +126,8 @@ def extract_base_url(spec: dict, doc_url: str) -> str:
         scheme = schemes[0] if schemes else "https"
         return f"{scheme}://{host}{base_path}".rstrip("/")
 
-    parsed = urlparse(doc_url)
-    return f"{parsed.scheme}://{parsed.netloc}".rstrip("/")
+    # 若規格未指明伺服器資訊，回傳 None
+    return None
 
 async def run_scraper(target_url: str, headless: bool = True, timeout_sec: int = 40):
     try:
@@ -173,7 +204,9 @@ def build_entry_yaml(doc_url: str, captured_specs: list, page_metadata: dict, ap
     default_website = f"{parsed_url.scheme}://{parsed_url.netloc}"
 
     if captured_specs:
-        spec_data = captured_specs[0]["data"]
+        # 若捕獲多份規格，優先挑選端點路徑最多的主要規格
+        best_spec_obj = max(captured_specs, key=lambda s: len(s["data"].get("paths", {})))
+        spec_data = best_spec_obj["data"]
         info = spec_data.get("info", {})
         title = info.get("title") or page_metadata.get("title") or "未命名 API"
         raw_desc = info.get("description") or page_metadata.get("description") or "提供相關業務領域之可程式化查詢介面。"
@@ -185,15 +218,18 @@ def build_entry_yaml(doc_url: str, captured_specs: list, page_metadata: dict, ap
         data_formats = infer_formats(spec_data)
         base_url = extract_base_url(spec_data, doc_url)
         path_count = len(spec_data.get("paths", {}))
-        notes = f"自動擷取自 {doc_url}。偵測到 {path_count} 個端點路徑。"
+        notes = (
+            f"自動擷取自 {doc_url} (共捕獲 {len(captured_specs)} 份規格，選取包含 {path_count} 個端點之主要規格)。"
+            f"本條目為自動推論之候選草稿，待人工覆核。"
+        )
     else:
         title = page_metadata.get("title") or "未命名 API"
         desc = page_metadata.get("description") or "提供相關業務領域之可程式化查詢介面。"
         spec_version = "unknown"
         auth_type = "unknown"
-        data_formats = ["JSON"]
-        base_url = default_website
-        notes = f"透過 Playwright 抓取頁面中繼資料，未偵測到底層 OpenAPI JSON 規格。"
+        data_formats = []
+        base_url = None
+        notes = "透過 Playwright 抓取頁面中繼資料，未偵測到底層 OpenAPI JSON 規格。各項欄位待人工覆核。"
 
     slug = api_id or slugify(title.split("-")[0].split("|")[0])
 
@@ -207,25 +243,26 @@ def build_entry_yaml(doc_url: str, captured_specs: list, page_metadata: dict, ap
         "provider_type": "official" if ("gov.tw" in parsed_url.netloc or "org.tw" in parsed_url.netloc) else "third_party",
         "docs_url": doc_url,
         "website_url": default_website,
-        "base_url": base_url,
         "api_style": "REST",
         "spec_formats": [spec_version] if spec_version != "unknown" else [],
         "data_formats": data_formats,
         "auth_type": auth_type,
         "access_tier": "free",
-        "pricing_url": default_website,
         "https_support": "yes" if doc_url.startswith("https") else "no",
         "cors_support": "unknown",
         "license_name": "OGDL-Taiwan-1.0" if "gov.tw" in parsed_url.netloc else "unknown",
-        "commercial_use": "allowed" if "gov.tw" in parsed_url.netloc else "unknown",
+        "commercial_use": "unknown",
         "service_status": "active",
         "review_status": "candidate",
-        "verification_level": "docs_reviewed",
+        "verification_level": "none",
         "last_reviewed_at": today_str,
         "sources": [doc_url],
         "notes": notes,
     }
+    if base_url:
+        entry["base_url"] = base_url
     return entry
+
 
 def main():
     parser = argparse.ArgumentParser(description="使用 Crawlee 探測與擷取 API 規格")

@@ -1,440 +1,405 @@
 #!/usr/bin/env python3
 """
-scan_data_gov_tw.py - 批次掃描 data.gov.tw 之 API 標籤並自動轉成候選草稿 (candidates)
+scan_data_gov_tw.py - data.gov.tw 自動 API 掃描與候選草稿生成器
 
-執行流程：
-1. 查詢 data.gov.tw 搜尋 API:
-   - category_dataset_tid: 43095 (API服務 / OpenAPI)
-   - all_file_format_tid: 11519 (API 格式)
-   - all_file_format_tid: 6413 (WEBSERVICES 格式 - 全為勞動部 Datastore)
-   - all_file_format_tid: 6410 (JSON 格式熱門項目)
-2. 套用靜態檔案過濾器 (排除純 CSV, ZIP, XLSX, 靜態 dump)
+流程：
+1. 查詢資料開放平臺搜尋介面 (POST https://data.gov.tw/api/front/dataset/list)
+   - 支援 category_dataset_tid: 43095 (API服務 / OpenAPI)
+   - 支援 all_file_format_tid: 11519 (API 格式)
+   - 支援 all_file_format_tid: 6413 (WEBSERVICES 格式)
+   - 支援 all_file_format_tid: 6410 (JSON 格式熱門項目)
+2. 過濾純靜態檔案 (CSV, XLSX, ZIP, 靜態 dump, blob 下載點)
 3. 提取可程式化端點與 Swagger/OpenAPI 定義
-4. 排除已在專案中完整收錄之垂直領域 (TDX, CWA, MOENV, WRA)
-5. 產出結構化、符合 schemas/api.schema.json 的高品質 candidate YAML
+4. 排除已於目錄中完整收錄之大型整合領域 (TDX, CWA, MOENV, WRA)
+5. 對同質平台進行動態代表性聚類收斂
+6. 動態產生符合 schemas/api.schema.json 的 candidate YAML 條目草稿
 """
 
-import sys
-import os
+import argparse
+from datetime import datetime, timezone
 import json
+from pathlib import Path
+import re
+import sys
 import time
 import urllib.request
 import urllib.parse
-from pathlib import Path
 import yaml
 
-sys.stdout.reconfigure(encoding='utf-8')
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DATA_APIS_DIR = ROOT_DIR / "data" / "apis"
 
-def main():
-    print("=== 開始執行 data.gov.tw 智慧掃描與候選 API 生成 ===")
+LIST_API = "https://data.gov.tw/api/front/dataset/list"
+DEFAULT_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)",
+    "Content-Type": "application/json"
+}
 
-    # 候選清單定義 (由掃描與啟發式過濾萃取之真實 API 服務)
-    candidates = [
-        # --- 內政部戶政司 ---
-        {
-            "id": "moi-ris-opendata",
-            "name_zh": "內政部戶政司戶政資訊開放資料 API",
-            "name_en": "Department of Household Registration Open Data API",
-            "description_zh": "內政部戶政司提供之 RESTful Datastore 程式化查詢介面，提供全國各級行政區人口統計、各鄉鎮市區人口密度、路名資料與各村里統計指標。",
-            "category": "Government & Public Services",
-            "provider": "內政部戶政司",
-            "provider_type": "official",
-            "docs_url": "https://www.ris.gov.tw/rs-opendata/api/v1/datastore/ODRP049/107",
-            "website_url": "https://data.gov.tw/dataset/35321",
-            "base_url": "https://www.ris.gov.tw/rs-opendata/api/v1/datastore",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/35321",
-                "https://data.gov.tw/dataset/8410"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 JSON/API 標籤發現，支援全國人口統計與路名即時查詢。"
-        },
-        # --- 臺南市政府 SOA ---
-        {
-            "id": "tainan-soa-api",
-            "name_zh": "臺南市政府開放資料服務導向 (SOA) API",
-            "name_en": "Tainan City SOA Open Data API",
-            "description_zh": "臺南市政府開放資料平臺建置之面向服務架構 (SOA) REST API，提供市政各機關業務資料、醫療院所清冊、不動產實價登錄及地方公用資訊即時查詢。",
-            "category": "Government & Public Services",
-            "provider": "臺南市政府",
-            "provider_type": "official",
-            "docs_url": "https://soa.tainan.gov.tw/",
-            "website_url": "https://data.gov.tw/dataset/6832",
-            "base_url": "https://soa.tainan.gov.tw/Api/Service/Get",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/6832",
-                "https://data.gov.tw/dataset/128852"
-            ],
-            "notes": "由 data.gov.tw 批次掃描發現，統一以 GUID 端點提供市政資料查詢。"
-        },
-        # --- 高雄市政府 OpenAPI ---
-        {
-            "id": "kcg-openapi-platform",
-            "name_zh": "高雄市政府資料開放 OpenAPI 平台",
-            "name_en": "Kaohsiung City Government OpenAPI Platform",
-            "description_zh": "高雄市政府資料開放平台提供之標準 OpenAPI/RESTful 查詢服務，提供市府各機關公共設施、公政通訊與地方治理開放端點。",
-            "category": "Government & Public Services",
-            "provider": "高雄市政府",
-            "provider_type": "official",
-            "docs_url": "https://openapi.kcg.gov.tw/",
-            "website_url": "https://data.gov.tw/dataset/166361",
-            "base_url": "https://openapi.kcg.gov.tw/Api/Service/Get",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/166361",
-                "https://openapi.kcg.gov.tw/"
-            ],
-            "notes": "由 data.gov.tw 批次掃描發現之地方政府標準 OpenAPI 平台。"
-        },
-        # --- 原住民族委員會 Datastore ---
-        {
-            "id": "cip-datastore-api",
-            "name_zh": "原住民族委員會開放資料 Datastore API",
-            "name_en": "Council of Indigenous Peoples Open Data Datastore API",
-            "description_zh": "原住民族委員會提供之開放資料 Datastore 程式化介面，提供原住民族部落位置地理資訊、文化就業調查統計及各項政策分析資料查詢。",
-            "category": "Government & Public Services",
-            "provider": "原住民族委員會",
-            "provider_type": "official",
-            "docs_url": "https://data.cip.gov.tw/",
-            "website_url": "https://data.gov.tw/dataset/178594",
-            "base_url": "https://data.cip.gov.tw/API/v1/dump/datastore",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/178594",
-                "https://data.cip.gov.tw/"
-            ],
-            "notes": "由 data.gov.tw 批次掃描發現之原民會專屬 Datastore 端點。"
-        },
-        # --- 內政部移民署 桃園機場入出境預報 ---
-        {
-            "id": "immigration-tpe-terminal1-arrival-forecast",
-            "name_zh": "桃園機場第一航廈入境人次預報 API",
-            "name_en": "Taoyuan Airport Terminal 1 Arrival Passenger Forecast API",
-            "description_zh": "內政部移民署提供之桃園國際機場第一航廈逐時入境旅客預報人次程式化介面，提供機場運量排程與地面交通接駁預測參考。",
-            "category": "Transportation",
-            "provider": "內政部移民署",
-            "provider_type": "official",
-            "docs_url": "https://data.gov.tw/dataset/167537",
-            "website_url": "https://data.gov.tw/dataset/167537",
-            "base_url": "https://opendata.immigration.gov.tw/APIS/TPE11",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/167537"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 API 標籤 (tid: 11519) 發現。"
-        },
-        {
-            "id": "immigration-tpe-terminal2-departure-forecast",
-            "name_zh": "桃園機場第二航廈出境人次預報 API",
-            "name_en": "Taoyuan Airport Terminal 2 Departure Passenger Forecast API",
-            "description_zh": "內政部移民署提供之桃園國際機場第二航廈逐時出境旅客預估人次程式化介面，提供即時旅運通關預測分析。",
-            "category": "Transportation",
-            "provider": "內政部移民署",
-            "provider_type": "official",
-            "docs_url": "https://data.gov.tw/dataset/167549",
-            "website_url": "https://data.gov.tw/dataset/167549",
-            "base_url": "https://opendata.immigration.gov.tw/APIS/TPE52",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/167549"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 API 標籤 (tid: 11519) 發現。"
-        },
-        # --- 臺灣港務公司 ---
-        {
-            "id": "twport-anping-cruise-schedule",
-            "name_zh": "安平港國際郵輪船期預報 API",
-            "name_en": "Anping Port International Cruise Schedule Forecast API",
-            "description_zh": "臺灣港務股份有限公司提供之安平港國際郵輪預報船期開放介面，提供船舶進出港排程與碼頭停泊動態查詢。",
-            "category": "Transportation",
-            "provider": "臺灣港務股份有限公司",
-            "provider_type": "official",
-            "docs_url": "https://data.gov.tw/dataset/161479",
-            "website_url": "https://data.gov.tw/dataset/161479",
-            "base_url": "https://tpapim-es.twport.com.tw:8065/v1.0/TcsNetOpenApi/GetForecastData",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/161479"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 API 標籤 (tid: 11519) 發現。"
-        },
-        {
-            "id": "twport-taichung-ferry-schedule",
-            "name_zh": "臺中港兩岸渡輪船期預報 API",
-            "name_en": "Taichung Port Cross-Strait Ferry Schedule Forecast API",
-            "description_zh": "臺灣港務股份有限公司提供之臺中港兩岸定期客貨渡輪船期預報開放端點，支援動態船期排程與港口旅客運輸查詢。",
-            "category": "Transportation",
-            "provider": "臺灣港務股份有限公司",
-            "provider_type": "official",
-            "docs_url": "https://data.gov.tw/dataset/44825",
-            "website_url": "https://data.gov.tw/dataset/44825",
-            "base_url": "https://tpapim-es.twport.com.tw:8065/v1.0/TcsNetOpenApi/GetForecastData",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/44825"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 API 標籤 (tid: 11519) 發現。"
-        },
-        # --- 勞動部 Datastore 核心業務系列 ---
-        {
-            "id": "mol-datastore-platform",
-            "name_zh": "勞動部資料開放平臺 RESTful Datastore API",
-            "name_en": "Ministry of Labor Open Data Service REST API",
-            "description_zh": "勞動部資料開放平臺提供之 RESTful Datastore 程式化查詢介面，支援分頁、篩選並提供 JSON 與 XML 格式之各類勞動就業、勞保、職安及勞動基金數據。",
-            "category": "Government & Public Services",
-            "provider": "勞動部",
-            "provider_type": "official",
-            "docs_url": "https://apiservice.mol.gov.tw/",
-            "website_url": "https://apiservice.mol.gov.tw/",
-            "base_url": "https://apiservice.mol.gov.tw/OdService/rest/datastore",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw",
-                "https://apiservice.mol.gov.tw/"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 WEBSERVICES (tid: 6413) 發現，收錄全平臺 Datastore 介面。"
-        },
-        {
-            "id": "mol-occupational-disaster-info",
-            "name_zh": "重大職業災害公開資訊 API",
-            "name_en": "Major Occupational Disasters Public Information API",
-            "description_zh": "勞動部職業安全衛生署提供之重大職業災害公開資料 RESTful API，提供發生日期、事業單位名稱、業別與災害概況等公開資訊。",
-            "category": "Government & Public Services",
-            "provider": "勞動部職業安全衛生署",
-            "provider_type": "official",
-            "docs_url": "https://data.gov.tw/dataset/126835",
-            "website_url": "https://data.gov.tw/dataset/126835",
-            "base_url": "https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-030238-Ecz",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/126835"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 WEBSERVICES (nid: 126835) 自動產生之候選項目。"
-        },
-        {
-            "id": "mol-labor-health-check-institutions",
-            "name_zh": "勞工體格及健康檢查認可醫療機構 API",
-            "name_en": "Recognized Medical Institutions for Labor Health Examination API",
-            "description_zh": "勞動部職業安全衛生署提供之全國勞工體格及健康檢查認可醫療機構清冊 RESTful 查詢介面，包含機構名稱、地址、電話與認可類別。",
-            "category": "Healthcare & Public Health",
-            "provider": "勞動部職業安全衛生署",
-            "provider_type": "official",
-            "docs_url": "https://data.gov.tw/dataset/6624",
-            "website_url": "https://data.gov.tw/dataset/6624",
-            "base_url": "https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-020057-Nvt",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/6624"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 WEBSERVICES (nid: 6624) 自動產生之候選項目。"
-        },
-        {
-            "id": "mol-ttqs-accredited-units",
-            "name_zh": "台灣訓練品質系統 (TTQS) 效期內單位名單 API",
-            "name_en": "Taiwan TrainQuali System (TTQS) Valid Accredited Units API",
-            "description_zh": "勞動部勞動力發展署提供之 TTQS 效期內受評單位清冊 RESTful 端點，包含單位名稱、通過版別、等級與有效期限。",
-            "category": "Education & Research",
-            "provider": "勞動部勞動力發展署",
-            "provider_type": "official",
-            "docs_url": "https://data.gov.tw/dataset/41723",
-            "website_url": "https://data.gov.tw/dataset/41723",
-            "base_url": "https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-030117-rz9",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/41723"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 WEBSERVICES (nid: 41723) 自動產生之候選項目。"
-        },
-        {
-            "id": "mol-foreign-worker-application-stats",
-            "name_zh": "雇主聘僱外國人線上申辦量統計 API",
-            "name_en": "Online Application Statistics for Employers Hiring Foreign Workers API",
-            "description_zh": "勞動部勞動力發展署提供之雇主聘僱外國人申請案件網路線上申辦量月度統計 RESTful 查詢介面。",
-            "category": "Government & Public Services",
-            "provider": "勞動部勞動力發展署",
-            "provider_type": "official",
-            "docs_url": "https://data.gov.tw/dataset/148753",
-            "website_url": "https://data.gov.tw/dataset/148753",
-            "base_url": "https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-030198-Vnf",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/148753"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 WEBSERVICES 自動產生之候選項目。"
-        },
-        {
-            "id": "mol-financial-market-indicators",
-            "name_zh": "勞動基金主要金融市場指標 API",
-            "name_en": "Labor Funds Key Financial Market Indicators API",
-            "description_zh": "勞動部勞動基金運用局提供之國內外主要股票指數、債券殖利率與金融市場指標月度統計 RESTful 介面。",
-            "category": "Finance & Business",
-            "provider": "勞動部勞動基金運用局",
-            "provider_type": "official",
-            "docs_url": "https://data.gov.tw/dataset/30815",
-            "website_url": "https://data.gov.tw/dataset/30815",
-            "base_url": "https://apiservice.mol.gov.tw/OdService/rest/datastore/A17030000J-000037-l9P",
-            "api_style": "REST",
-            "auth_type": "none",
-            "access_tier": "free",
-            "https_support": "yes",
-            "cors_support": "unknown",
-            "license_name": "OGDL-Taiwan-1.0",
-            "commercial_use": "allowed",
-            "service_status": "active",
-            "review_status": "candidate",
-            "verification_level": "none",
-            "last_reviewed_at": "2026-10-14",
-            "sources": [
-                "https://data.gov.tw/dataset/30815"
-            ],
-            "notes": "由 data.gov.tw 批次掃描 WEBSERVICES (nid: 30815) 自動產生之候選項目。"
-        }
+def is_pure_static_url(url: str) -> bool:
+    """判斷單一 URL 是否為純靜態檔案下載或 dump"""
+    if not url or not url.startswith("http"):
+        return True
+    u_lower = url.lower()
+    clean_path = u_lower.split("?")[0]
+
+    # 常見靜態副檔名 (若無動態查詢參數或只是 download 呼叫)
+    static_exts = ('.csv', '.xlsx', '.xls', '.zip', '.pdf', '.ods', '.7z', '.rar', '.txt', '.doc', '.docx')
+    if any(clean_path.endswith(ext) for ext in static_exts):
+        if "?" not in url or "download" in u_lower:
+            return True
+
+    # 常見純檔案下載伺服器與路徑特徵
+    static_markers = [
+        "apiservice.mol.gov.tw/odservice/download",
+        "/api/dataset/",  # 如 data.taipei 的 /download 封裝
+        "/api/datasets/", # 如 data.ntpc 的 /csv/file
+        "blob.core.windows.net",
+        "stats.moe.gov.tw/files/opendata/",
+        "od.cdc.gov.tw/eic/",
+        "/resource.download"
     ]
+    if any(m in u_lower for m in static_markers) and ("/rest/datastore" not in u_lower and "/apis/" not in u_lower):
+        return True
 
-    print(f"即將寫入 {len(candidates)} 個高品質 candidate YAML 項目...")
-    created_count = 0
-    for cand in candidates:
-        file_path = DATA_APIS_DIR / f"{cand['id']}.yml"
-        with open(file_path, "w", encoding="utf-8") as f:
-            yaml.safe_dump(cand, f, allow_unicode=True, sort_keys=False)
-        print(f"  + [{cand['review_status']}] {cand['id']}: {cand['name_zh']} -> {file_path.name}")
-        created_count += 1
+    return False
 
-    print(f"\n批次處理完成！共寫入 {created_count} 項 candidate 候選草稿。")
+def extract_valid_api_urls(dataset_item: dict) -> list[str]:
+    """從資料集的 all_url 列表中提取真正具有程式化介面特徵的端點"""
+    endpoints = []
+    urls = dataset_item.get("all_url", [])
+    if isinstance(urls, str):
+        urls = [urls]
+
+    for u in urls:
+        if not u or not u.startswith("http"):
+            continue
+        if is_pure_static_url(u):
+            continue
+
+        u_lower = u.lower()
+        # API 特徵
+        api_features = [
+            "/rest/datastore", "/apis/", "/api/v", "swagger", "openapi",
+            "getforecastdata", "odata", "%24format=", "$format=", "format=json",
+            "authorization=", "apikey=", "api_key="
+        ]
+        if any(feat in u_lower for feat in api_features):
+            endpoints.append(u)
+        elif "/api/" in u_lower and not any(clean_u.endswith(ext) for clean_u in [u_lower.split("?")[0]] for ext in ('.csv', '.zip', '.xlsx')):
+            endpoints.append(u)
+
+    return endpoints
+
+def map_category(agency: str, title: str) -> str:
+    """依機關名稱與標題文字映射至 schema 定義的主要業務領域"""
+    text = (agency + " " + title).lower()
+    if any(k in text for k in ["氣象", "天氣", "雨量", "地震", "空氣", "水利", "淹水", "水庫", "河川", "環境"]):
+        return "Weather & Environment"
+    if any(k in text for k in ["交通", "鐵路", "客運", "公車", "捷運", "自行車", "航班", "港", "船舶", "航空", "車輛", "動態"]):
+        return "Transportation"
+    if any(k in text for k in ["金融", "股票", "匯率", "商業", "公司", "發票", "稅", "財政", "基金"]):
+        return "Finance & Business"
+    if any(k in text for k in ["地圖", "國土", "測繪", "坐標", "地籍", "門牌", "空間"]):
+        return "Maps & Geospatial"
+    if any(k in text for k in ["醫療", "健保", "健康", "疾病", "衛生", "醫事", "藥品"]):
+        return "Healthcare & Public Health"
+    if any(k in text for k in ["觀光", "旅遊", "文化", "藝文", "景點", "古蹟"]):
+        return "Culture & Tourism"
+    if any(k in text for k in ["教育", "學術", "學校", "研考", "專利", "研究", "ttqs"]):
+        return "Education & Research"
+    if any(k in text for k in ["工具", "郵遞區號", "轉換"]):
+        return "Developer Tools"
+    return "Government & Public Services"
+
+def clean_description(desc: str, title: str) -> str:
+    """清理摘要字串，確保長度與客觀性"""
+    if not desc or len(desc.strip()) < 5:
+        return f"由主管機關提供之{title}資料查詢介面與程式化端點。"
+    clean = re.sub(r'<[^>]+>', '', desc).replace("\r\n", " ").replace("\n", " ").strip()
+    if len(clean) < 5:
+        return f"由主管機關提供之{title}資料查詢介面與程式化端點。"
+    return clean[:300]
+
+def slugify(text: str) -> str:
+    """將文字轉為符合 schema 正則 (^[a-z0-9]+(-[a-z0-9]+)*$) 的 slug"""
+    slug = re.sub(r"[^a-zA-Z0-9]+", "-", text).strip("-").lower()
+    slug = re.sub(r"-+", "-", slug)
+    return slug or "unknown-service"
+
+def fetch_datasets_from_api(
+    filter_field: str,
+    query_val: str,
+    page_limit: int = 100,
+    max_pages: int = 5,
+    sleep_sec: float = 0.2
+) -> list[dict]:
+    """向 data.gov.tw 搜尋 API 發送分頁查詢"""
+    results = []
+    for page in range(1, max_pages + 1):
+        payload = {
+            "bool": [],
+            "filter": [{"fields": filter_field, "query": str(query_val)}],
+            "page_num": page,
+            "page_limit": page_limit,
+            "sort": "resource_download_times_past_7days_desc"
+        }
+        req = urllib.request.Request(LIST_API, data=json.dumps(payload).encode('utf-8'), headers=DEFAULT_HEADERS)
+        try:
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                data = json.loads(resp.read().decode('utf-8'))
+                items = data.get("payload", {}).get("search_result", [])
+                total = data.get("payload", {}).get("search_count", 0)
+                if not items:
+                    break
+                results.extend(items)
+                print(f"  [{filter_field}:{query_val}] Page {page}: 取得 {len(items)} 筆 (累積: {len(results)}/{total})")
+                if len(results) >= total:
+                    break
+            time.sleep(sleep_sec)
+        except Exception as e:
+            print(f"  [!] 擷取 {filter_field}:{query_val} 第 {page} 頁時發生錯誤: {e}", file=sys.stderr)
+            break
+    return results
+
+def evaluate_dataset(item: dict) -> dict | None:
+    """
+    評估單一資料集是否符合可程式化 API 標準。
+    若符合，回傳分析結果；若為純檔案，回傳 None。
+    """
+    nid = item.get("nid")
+    title = (item.get("title") or "").strip()
+    agency = (item.get("agency_name") or "").strip()
+    all_oas = item.get("all_oas_url")
+    if all_oas and not all_oas.startswith("http"):
+        all_oas = None
+
+    raw_docs = item.get("api_doc_url", [])
+    if isinstance(raw_docs, str):
+        raw_docs = [raw_docs]
+    docs = [d for d in raw_docs if d and isinstance(d, str) and d.startswith("http")]
+
+    valid_endpoints = extract_valid_api_urls(item)
+
+    # 判定條件：必須有 OAS，或有有效文件網址，或有提取出的 API 端點
+    if not all_oas and not docs and not valid_endpoints:
+        return None
+
+    return {
+        "raw": item,
+        "nid": str(nid),
+        "title": title,
+        "agency": agency,
+        "all_oas_url": all_oas,
+        "docs_urls": docs,
+        "valid_endpoints": valid_endpoints
+    }
+
+def build_candidate_entry(eval_result: dict, today_str: str | None = None) -> dict:
+    """動態從評估結果組裝符合 Schema 規範的 Candidate YAML 條目字典"""
+    raw = eval_result["raw"]
+    nid = eval_result["nid"]
+    title = eval_result["title"]
+    agency = eval_result["agency"]
+    all_oas = eval_result["all_oas_url"]
+    docs = eval_result["docs_urls"]
+    endpoints = eval_result["valid_endpoints"]
+
+    today = today_str or datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    cat = map_category(agency, title)
+    desc = clean_description(raw.get("field_description") or raw.get("abstract") or "", title)
+
+    # 優先選取 docs_url
+    docs_url = docs[0] if docs else (all_oas if all_oas else f"https://data.gov.tw/dataset/{nid}")
+    base_url = endpoints[0] if endpoints else None
+    https_support = "yes" if (base_url and base_url.startswith("https")) or (docs_url and docs_url.startswith("https")) else "no"
+
+    # 動態產生 slug
+    slug = f"gov-tw-nid-{nid}"
+
+    entry = {
+        "id": slug,
+        "name_zh": title,
+        "description_zh": desc,
+        "category": cat,
+        "provider": agency or "政府機關",
+        "provider_type": "official",
+        "docs_url": docs_url,
+        "website_url": f"https://data.gov.tw/dataset/{nid}",
+        "api_style": "REST",
+        "auth_type": "none",
+        "access_tier": "free",
+        "https_support": https_support,
+        "cors_support": "unknown",
+        "license_name": "OGDL-Taiwan-1.0",
+        "commercial_use": "allowed",
+        "service_status": "active",
+        "review_status": "candidate",
+        "verification_level": "none",
+        "last_reviewed_at": today,
+        "sources": [
+            f"https://data.gov.tw/dataset/{nid}"
+        ],
+        "notes": f"由 data.gov.tw 掃描器自動動態發現與轉換之候選草稿 (nid: {nid})。發現時間：{today}。"
+    }
+    if base_url:
+        entry["base_url"] = base_url
+    if all_oas:
+        entry["spec_formats"] = ["OpenAPI"]
+
+    return entry
+
+def cluster_and_filter(
+    evaluated_items: list[dict],
+    existing_ids: set[str],
+    skip_large_platforms: bool = True
+) -> list[dict]:
+    """
+    對掃描評估結果進行去重與智慧分群：
+    1. 排除已收錄之大型整合平台 (TDX, CWA, MOENV, WRA)
+    2. 對於同質性極高之 Datastore (如勞動部)，動態按業務單位分群，每群僅保留最具代表性/下載量高之端點
+    """
+    filtered = []
+    mol_items = []
+
+    for item in evaluated_items:
+        str_all = f"{item['title']} {item['agency']} {item.get('all_oas_url', '')} {' '.join(item['valid_endpoints'])}".lower()
+
+        # 排除已於策略 A 細粒度收錄之大型垂直平台
+        if skip_large_platforms:
+            if any(p in str_all for p in ["transportdata.tw", "cwa.gov.tw", "氣象署", "moenv.gov.tw", "wra.gov.tw"]):
+                continue
+
+        # 勞動部 Datastore 收集待聚類
+        if "apiservice.mol.gov.tw" in str_all or "勞動部" in item["agency"]:
+            mol_items.append(item)
+            continue
+
+        filtered.append(item)
+
+    # 針對勞動部 Datastore 進行業務子機關分群代表性提取
+    if mol_items:
+        agency_groups = {}
+        for it in mol_items:
+            sub_ag = it["agency"] or "勞動部"
+            agency_groups.setdefault(sub_ag, []).append(it)
+        
+        # 每個業務子機關依下載次數動態選取前 1~2 筆代表
+        for sub_ag, group in agency_groups.items():
+            sorted_group = sorted(
+                group,
+                key=lambda x: x["raw"].get("resource_download_times_past_7days", 0) or 0,
+                reverse=True
+            )
+            filtered.extend(sorted_group[:2])
+
+    return filtered
+
+def run_scanner(
+    fixture_path: Path | None = None,
+    out_dir: Path | None = None,
+    dry_run: bool = False,
+    max_pages: int = 3
+) -> list[dict]:
+    """執行完整掃描流程"""
+    target_out_dir = out_dir or DATA_APIS_DIR
+    today_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    # 讀取現有 ID
+    existing_ids = set()
+    if target_out_dir.exists():
+        for p in target_out_dir.glob("*.yml"):
+            existing_ids.add(p.stem)
+
+    raw_datasets = []
+    if fixture_path and fixture_path.exists():
+        print(f"[*] 使用本地測試 Fixture: {fixture_path}")
+        with open(fixture_path, "r", encoding="utf-8") as f:
+            raw_datasets = json.load(f)
+    else:
+        print("[*] 正在向 data.gov.tw 發送分頁查詢 (API服務/WEBSERVICES/API格式/JSON熱門)...")
+        # 1. 官方 API服務
+        raw_datasets.extend(fetch_datasets_from_api("category_dataset_tid", "43095", max_pages=max_pages))
+        # 2. 官方 API 格式
+        raw_datasets.extend(fetch_datasets_from_api("all_file_format_tid", "11519", max_pages=max_pages))
+        # 3. 官方 WEBSERVICES
+        raw_datasets.extend(fetch_datasets_from_api("all_file_format_tid", "6413", max_pages=max_pages))
+        # 4. JSON 格式熱門
+        raw_datasets.extend(fetch_datasets_from_api("all_file_format_tid", "6410", max_pages=max_pages))
+
+    # 去重
+    unique_items = {}
+    for d in raw_datasets:
+        nid = str(d.get("nid"))
+        if nid and nid not in unique_items:
+            unique_items[nid] = d
+
+    print(f"[*] 掃描取得唯一資料集共: {len(unique_items)} 筆")
+
+    # 評估與過濾
+    evaluated_candidates = []
+    static_filtered_count = 0
+    for nid, d in unique_items.items():
+        res = evaluate_dataset(d)
+        if res is not None:
+            evaluated_candidates.append(res)
+        else:
+            static_filtered_count += 1
+
+    print(f"[*] 過濾純靜態檔案與 dump: {static_filtered_count} 筆")
+    print(f"[*] 符合可程式化特徵之資料集: {len(evaluated_candidates)} 筆")
+
+    # 聚類與去重
+    clustered = cluster_and_filter(evaluated_candidates, existing_ids)
+    print(f"[*] 經平台去重與同質聚類收斂後之高品質候選項目: {len(clustered)} 筆")
+
+    # 產出 YAML entries
+    generated_entries = []
+    for c in clustered:
+        entry = build_candidate_entry(c, today_str=today_str)
+        generated_entries.append(entry)
+
+    if not dry_run:
+        target_out_dir.mkdir(parents=True, exist_ok=True)
+        for g in generated_entries:
+            file_path = target_out_dir / f"{g['id']}.yml"
+            # 避免覆蓋已經被人工提升為 verified 的既有檔案
+            if file_path.exists():
+                try:
+                    with open(file_path, "r", encoding="utf-8") as existing_f:
+                        existing_data = yaml.safe_load(existing_f)
+                        if existing_data.get("review_status") == "verified":
+                            continue
+                except Exception:
+                    pass
+
+            with open(file_path, "w", encoding="utf-8") as f:
+                yaml.safe_dump(g, f, allow_unicode=True, sort_keys=False)
+            print(f"  + [Candidate 生成] {g['id']} ({g['name_zh']}) -> {file_path.name}")
+
+    return generated_entries
+
+def main():
+    parser = argparse.ArgumentParser(description="data.gov.tw 自動 API 掃描與候選草稿生成器")
+    parser.add_argument("--fixture", type=Path, help="從本地 JSON Fixture 載入資料集進行測試")
+    parser.add_argument("--dry-run", action="store_true", help="僅執行掃描與分析，不寫入檔案")
+    parser.add_argument("--out-dir", type=Path, help="指定 YAML 輸出目錄")
+    parser.add_argument("--max-pages", type=int, default=2, help="每個類別最大抓取分頁數")
+    args = parser.parse_args()
+
+    entries = run_scanner(
+        fixture_path=args.fixture,
+        out_dir=args.out_dir,
+        dry_run=args.dry_run,
+        max_pages=args.max_pages
+    )
+    print(f"\n[V] 掃描作業完成，共產出/發現 {len(entries)} 筆候選項目。")
 
 if __name__ == "__main__":
     main()

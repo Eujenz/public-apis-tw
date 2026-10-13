@@ -32,18 +32,25 @@
 
 ---
 
-### 1.4 目前 45 筆資料集之狀態分佈 (Current 45 Datasets Distribution)
-完成大型平台（TDX、CWA、MOENV、WRA）垂直領域細粒度拆分後，目前版本庫內 45 筆 API 的審查與驗證狀態分佈如下：
+### 1.4 目前 59 筆資料集之狀態分佈 (Current 59 Datasets Distribution)
+在經歷「策略 A（高價值大型平台細粒度垂直拆分）」與「策略 B（data.gov.tw 智慧掃描與候選草稿提取）」後，目前版本庫內 59 筆 API 之審查與技術驗證狀態分佈如下：
 
 - **審查狀態分佈 (`review_status`)**：
-  - `verified`（已審核通過，列入正式目錄主表）：**41 筆**
-  - `needs_review`（待官方或維護者進一步查核，列入附錄）：**2 筆** (`cdc-surveillance-opendata`, `nhi-medical-institutions`)
-  - `candidate`（候選待審項目，列入附錄）：**2 筆** (`dgpa-work-class-cancel`, `tw-air-quality-history`)
+  - `verified`（已完成官方文件/實測核實，列入正式目錄主表）：**41 筆** (69.5%)
+  - `candidate`（候選草稿，不列入主表，僅存於附錄供社群追蹤）：**16 筆** (27.1%)
+    * 歷史資料候選：`dgpa-work-class-cancel`, `tw-air-quality-history` (2 筆)
+    * data.gov.tw 動態掃描候選：`moi-ris-opendata`, `tainan-soa-api`, `kcg-openapi-platform`, `cip-datastore-api`, `immigration-tpe-terminal1-arrival-forecast`, `immigration-tpe-terminal2-departure-forecast`, `twport-anping-cruise-schedule`, `twport-taichung-ferry-schedule`, `mol-datastore-platform`, `mol-occupational-disaster-info`, `mol-labor-health-check-institutions`, `mol-ttqs-accredited-units`, `mol-foreign-worker-application-stats`, `mol-financial-market-indicators` (14 筆)
+  - `needs_review`（因端點異動或規格變更待重新覆核，列入附錄）：**2 筆** (3.4%) (`cdc-surveillance-opendata`, `nhi-medical-institutions`)
 
 - **技術查核等級分佈 (`verification_level`)**：
-  - `endpoint_tested`（實測端點通過）：**13 筆** (`moa-agri-trans`, `moea-gcis-company`, `nlsc-map-api`, `taipei-opendata-portal`, `taipower-power-status`, `twse-openapi`, `nhi-er-congestion`, `lass-airbox`, `tpml-seat-status`, `kcg-waste-truck-gps`, `judicial-open-data`, `twinkle-hub-mcp`, `tfda-open-data`)
-  - `docs_reviewed`（依官方技術文件核實）：**30 筆** (包含 TDX、CWA、MOENV、WRA 等各垂直子領域 API 與原收錄條目)
-  - `none`（未經查核，候選項目）：**2 筆** (`dgpa-work-class-cancel`, `tw-air-quality-history`)
+  - `endpoint_tested`（實測端點通過）：**13 筆** (22.0%) (`moa-agri-trans`, `moea-gcis-company`, `nlsc-map-api`, `taipei-opendata-portal`, `taipower-power-status`, `twse-openapi`, `nhi-er-congestion`, `lass-airbox`, `tpml-seat-status`, `kcg-waste-truck-gps`, `judicial-open-data`, `twinkle-hub-mcp`, `tfda-open-data`)
+  - `docs_reviewed`（依官方技術文件核實）：**28 筆** (47.5%) (包含 TDX 8 項垂直領域、CWA 5 項氣象子領域、MOENV 3 項環境子領域、WRA 4 項水情子領域等)
+  - `none`（未經查核，候選與待覆核項目）：**18 筆** (30.5%) (16 筆 candidate + 2 筆 needs_review)
+
+- **時效性與過期政策稽核 (Freshness Audit)**：
+  - 目前 59 筆條目之 `last_reviewed_at` 均在 2026-10-13 至 2026-10-14 期間，無超過 365 天之過期紀錄。
+  - 所有標記 `endpoint_tested` 之條目均附帶有效之 `last_endpoint_tested_at` 日期。
+
 
 ---
 

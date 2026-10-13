@@ -64,3 +64,19 @@
 **驗證相容性強制規則**：
 1. 若 `review_status = verified`，則 `verification_level` 不得為 `none`（至少需為 `docs_reviewed`）。
 2. 若 `verification_level = endpoint_tested` 或 `sample_response_checked`，則必須明確填寫 `last_endpoint_tested_at`，且 `review_status` 不得為 `candidate`。
+
+---
+
+## 5. 時效性與覆核過期機制 (Freshness & Expiry Policy)
+
+API 規格與公部門服務常因機關組織改造、平台改版或政策變更而失效。本專案嚴格區分「歷史曾測試合格」與「近期確認有效」：
+
+1. **中繼資料查核時效 (`last_reviewed_at`)**：
+   - 有效評估期為 **365 天**。
+   - 超過 365 天未重新人工核實者，CI 驗證工具將提出「查核已過期 (Freshness Warning)」提醒。
+   - 超過 730 天（兩年）未曾覆核且無法自動取得存活訊號之條目，維護團隊應主動降級為 `review_status: needs_review`。
+2. **端點實測時效 (`last_endpoint_tested_at`)**：
+   - 實測標記僅代表發送請求當下之網路可達性與回應正確性。
+   - `endpoint_tested` 記錄若超過 **90 天** 未執行新一輪 HTTP 健康檢查，目錄消費者應視為歷史證據，不得視為當下百分之百可用保證。
+   - 專案將規劃定期端點存活健康監測腳本，持續更新實測時間戳記。
+
