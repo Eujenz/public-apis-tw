@@ -21,7 +21,7 @@ jobs:
         run: uv python install 3.12
 
       - name: Install dependencies
-        run: uv sync --extra dev
+        run: uv sync
 
       - name: Validate catalog schema and rules
         run: uv run python scripts/validate_catalog.py
@@ -32,6 +32,11 @@ jobs:
       - name: Build catalog docs and JSON
         run: uv run python scripts/build_catalog.py
 
-      - name: Check git status for uncommitted build artifacts
+      - name: Ensure generated docs and JSON are up to date and committed
         run: |
-          git status --porcelain
+          if ! git diff --quiet docs/catalog.md dist/apis.json; then
+            echo "Error: Generated docs/catalog.md or dist/apis.json are out of date!"
+            echo "Please run 'uv run python scripts/build_catalog.py' and commit the changes."
+            git diff docs/catalog.md dist/apis.json
+            exit 1
+          fi

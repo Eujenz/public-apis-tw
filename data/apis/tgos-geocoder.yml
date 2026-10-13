@@ -1,4 +1,4 @@
-id: "tgos-geocoder"
+﻿id: "tgos-geocoder"
 name_zh: "TGOS 全國地理資訊圖資雲門牌地址定位 API"
 name_en: "TGOS Address Geocoding API"
 description_zh: "內政部地理資訊圖資雲服務平台提供之標準門牌地址定位 (Geocoding) 與坐標反查服務。"
@@ -24,7 +24,7 @@ rate_limit: "需申請 TGOS 會員並註冊 APP ID / API Key，免費額度每�
 service_status: "active"
 review_status: "verified"
 verification_level: "docs_reviewed"
-last_verified_at: "2026-10-13"
+last_reviewed_at: "2026-10-13"
 sources:
   - "https://www.tgos.tw/TGOS/Web/Services/TGOS_Services.aspx"
 notes: "台灣最具權威性的公部門門牌座標對照服務。"

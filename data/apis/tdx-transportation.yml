@@ -1,4 +1,4 @@
-id: "tdx-transportation"
+﻿id: "tdx-transportation"
 name_zh: "交通部運輸資料流通服務 (TDX)"
 name_en: "Transport Data eXchange (TDX)"
 description_zh: "整合台灣軌道 (台鐵/高鐵/捷運)、公路客運、市區公車、公共自行車 (YouBike) 與航空船舶之全國即時動態與靜態路網資料。"
@@ -24,7 +24,7 @@ rate_limit: "免費會員基本額度每日有請求次數上限，亦提供 OAu
 service_status: "active"
 review_status: "verified"
 verification_level: "docs_reviewed"
-last_verified_at: "2026-10-13"
+last_reviewed_at: "2026-10-13"
 sources:
   - "https://tdx.transportdata.tw"
   - "https://tdx.transportdata.tw/api-service/swagger"

@@ -4,22 +4,27 @@ validate_catalog.py - 驗證 public-apis-tw 目錄資料
 
 檢查項目：
 1. YAML 檔案是否能正常解析
-2. 是否符合 JSON Schema
-3. id 與檔名是否完全相符
+2. 是否符合 JSON Schema (Draft 2020-12)
+3. id 與檔名 stem 是否完全相符
 4. id 是否唯一無重複
-5. category 是否合法
+5. category 是否符合定義之領域分類
 6. 網址格式與協定合理性 (docs_url 等必須以 http/https 開頭)
-7. review_status 與 verification_level 語意一致性：
-   - verified 狀態必須具有至少一個可靠來源 (sources) 與有效查核日期
-   - verification_level 為 endpoint_tested 或 sample_response_checked 時不得為 candidate
-8. 檢查是否有潛在重複的 API (重複的 docs_url 發出 warning)
+7. 狀態相容性與查核等級一致性：
+   - review_status 為 verified 時：
+     * 必須有 sources (至少 1 筆) 與 last_reviewed_at
+     * verification_level 不得為 none (必須至少為 docs_reviewed)
+   - verification_level 為 endpoint_tested 或 sample_response_checked 時：
+     * 必須填寫 last_endpoint_tested_at
+     * review_status 不得為 candidate
+   - last_endpoint_tested_at 存在時，verification_level 不得為 none 或 docs_reviewed
+8. 重複 docs_url 檢查並提出警告 (避免重複收錄，但允許共用文件入口之情境)
 """
 
 import sys
 import json
 from pathlib import Path
 import yaml
-from jsonschema import validate, ValidationError, Draft202012Validator
+from jsonschema import Draft202012Validator
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT_DIR / "data" / "apis"
@@ -87,19 +92,28 @@ def main() -> int:
         review_status = data.get("review_status")
         verification_level = data.get("verification_level")
         sources = data.get("sources", [])
-        last_verified = data.get("last_verified_at")
+        last_reviewed = data.get("last_reviewed_at")
+        last_endpoint_tested = data.get("last_endpoint_tested_at")
 
+        # review_status = verified 的相容條件
         if review_status == "verified":
             if not sources or len(sources) == 0:
                 errors.append(f"{rel_path}: review_status 為 verified 時必須至少提供一筆來源 (sources)")
-            if not last_verified:
-                errors.append(f"{rel_path}: review_status 為 verified 時必須填寫 last_verified_at")
+            if not last_reviewed:
+                errors.append(f"{rel_path}: review_status 為 verified 時必須填寫 last_reviewed_at")
+            if verification_level == "none":
+                errors.append(f"{rel_path}: review_status 為 verified 但 verification_level 為 none，邏輯不符 (已審查通過者至少需為 docs_reviewed)")
 
+        # verification_level 與 last_endpoint_tested_at 的約束
         if verification_level in ("endpoint_tested", "sample_response_checked"):
             if review_status == "candidate":
                 errors.append(f"{rel_path}: verification_level 為 {verification_level} 但 review_status 仍為 candidate，邏輯不符")
+            if not last_endpoint_tested:
+                errors.append(f"{rel_path}: verification_level 為 {verification_level} 時必須明確填寫 last_endpoint_tested_at")
+        elif last_endpoint_tested:
+            errors.append(f"{rel_path}: 已填寫 last_endpoint_tested_at，但 verification_level 仍為 {verification_level}，應提升為 endpoint_tested 或更高")
 
-        # 5. 重複 docs_url 警告 (部分不同 API 可能共用同一文件中心，故以警告處理)
+        # 5. 重複 docs_url 警告 (共用入口提示)
         docs_url = data.get("docs_url")
         if docs_url:
             if docs_url in seen_docs_urls:
@@ -120,7 +134,7 @@ def main() -> int:
             print(f"  - {e}", file=sys.stderr)
         return 1
 
-    print(f"\n[V] 驗證通過！共成功檢查 {len(yaml_files)} 個 API 檔案，無格式或邏輯錯誤。")
+    print(f"\n[V] 驗證通過！共成功檢查 {len(yaml_files)} 個 API 檔案，無格式或邏輯相容性錯誤。")
     return 0
 
 if __name__ == "__main__":

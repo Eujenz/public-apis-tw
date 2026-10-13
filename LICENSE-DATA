@@ -1,0 +1,19 @@
+# Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+本目錄彙整資料集（包含 `data/apis/*.yml`、`docs/catalog.md`、`dist/apis.json` 中由本專案貢獻者自行建立且有權授權之詮釋資料與編目整理）：
+
+採用 **創用 CC 姓名標示 4.0 國際 (CC BY 4.0)** 授權釋出。
+
+詳細授權條款全文請參閱：
+https://creativecommons.org/licenses/by/4.0/legalcode.zh-Hant
+
+---
+
+### 重要權利與上游授權界定聲明 (Important Upstream Rights Disclaimer)
+
+1. **僅限專案原創中繼資料與編目彙整**：
+   本授權（CC BY 4.0）僅適用於本專案自行建立、撰寫與整理之目錄結構、欄位詮釋與中繼資料。
+2. **上游 API 資料與服務之獨立授權**：
+   本目錄收錄之各項 API 所回傳之實際資料、商標、官方技術文件及端點，其智財權與授權條款均歸各自原提供機關或法人所有（例如多數台灣政府開放資料採用「政府資料開放授權條款 OGDL-Taiwan-1.0」，第三方服務則依其個別商業或開源條款）。
+3. **無重新授權上游資料**：
+   將 API 資訊收錄進本目錄，絕不代表亦不得解釋為將該上游 API 或其資料內容重新授權為 CC BY 4.0。使用者介接與使用各項 API 時，必須嚴格遵守各該 API 個別宣告之授權條款與使用規範。

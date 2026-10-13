@@ -21,7 +21,7 @@
     "service_status",
     "review_status",
     "verification_level",
-    "last_verified_at",
+    "last_reviewed_at",
     "sources"
   ],
   "properties": {
@@ -47,7 +47,7 @@
     "category": {
       "type": "string",
       "enum": [
-        "Government",
+        "Government & Public Services",
         "Finance & Business",
         "Weather & Environment",
         "Transportation",
@@ -58,7 +58,7 @@
         "Developer Tools",
         "Other"
       ],
-      "description": "Primary category"
+      "description": "Primary domain category based on usage context"
     },
     "provider": {
       "type": "string",
@@ -97,19 +97,21 @@
         "REST",
         "GraphQL",
         "SOAP",
+        "WebSocket",
+        "OGC Web Services",
         "OpenAPI",
         "RPC",
         "other",
         "unknown"
       ],
-      "description": "Architectural style of the API"
+      "description": "Architectural style or protocol of the programmable API"
     },
     "data_formats": {
       "type": "array",
       "items": {
         "type": "string"
       },
-      "description": "Supported response formats, e.g. ['JSON', 'XML']"
+      "description": "Supported response formats, e.g. ['JSON', 'XML', 'CSV']"
     },
     "auth_type": {
       "type": "string",
@@ -160,13 +162,13 @@
     "license_name": {
       "type": "string",
       "minLength": 1,
-      "description": "Name of the license, e.g. 'OGDL-Taiwan-1.0', 'CC BY 4.0', 'Proprietary', 'unknown'"
+      "description": "Name of the upstream API data license, e.g. 'OGDL-Taiwan-1.0', 'CC BY 4.0', 'Proprietary', 'unknown'"
     },
     "license_url": {
       "type": "string",
       "format": "uri",
       "pattern": "^https?://",
-      "description": "Link to license terms"
+      "description": "Link to upstream license terms"
     },
     "commercial_use": {
       "type": "string",
@@ -176,7 +178,7 @@
         "prohibited",
         "unknown"
       ],
-      "description": "Commercial use permissions"
+      "description": "Commercial use permissions according to upstream license"
     },
     "rate_limit": {
       "type": "string",
@@ -190,16 +192,16 @@
         "unavailable",
         "unknown"
       ],
-      "description": "Current availability status of the service"
+      "description": "Current availability status of the upstream service"
     },
     "review_status": {
       "type": "string",
       "enum": [
         "verified",
         "candidate",
-        "deprecated"
+        "needs_review"
       ],
-      "description": "Catalog curation review status"
+      "description": "Catalog curation review status of this metadata entry"
     },
     "verification_level": {
       "type": "string",
@@ -211,10 +213,15 @@
       ],
       "description": "Depth of technical verification performed"
     },
-    "last_verified_at": {
+    "last_reviewed_at": {
       "type": "string",
       "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-      "description": "Date of last verification (YYYY-MM-DD)"
+      "description": "Date of last human metadata curation review (YYYY-MM-DD)"
+    },
+    "last_endpoint_tested_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Date of last actual HTTP endpoint test (YYYY-MM-DD). Optional, only populated when actual request made."
     },
     "sources": {
       "type": "array",
@@ -227,7 +234,7 @@
     },
     "notes": {
       "type": "string",
-      "description": "Important caveats, technical notes, or pending items"
+      "description": "Important caveats, technical notes, eligibility constraints, or pending items"
     }
   },
   "additionalProperties": false

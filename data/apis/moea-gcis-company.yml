@@ -1,4 +1,4 @@
-id: "moea-gcis-company"
+﻿id: "moea-gcis-company"
 name_zh: "經濟部商工登記資料 API"
 name_en: "MOEA Business Registration OpenData API"
 description_zh: "提供台灣全國公司設立登記、商業登記、分公司資料及營業項目代碼之即時查詢介面。"
@@ -24,7 +24,7 @@ rate_limit: "免金鑰直接存取，但有伺服器頻率防護 (IP-based rate 
 service_status: "active"
 review_status: "verified"
 verification_level: "docs_reviewed"
-last_verified_at: "2026-10-13"
+last_reviewed_at: "2026-10-13"
 sources:
   - "https://data.gcis.nat.gov.tw/od/rule"
   - "https://data.gov.tw/dataset/9645"

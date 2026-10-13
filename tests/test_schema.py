@@ -20,22 +20,22 @@ def test_schema_validates_valid_sample():
     valid_record = {
         "id": "cwa-opendata",
         "name_zh": "中央氣象署開放資料平台 API",
-        "description_zh": "提供台灣即時天氣觀測、預報、地震及氣象雷達資料之 OpenAPI 介面。",
+        "description_zh": "提供台灣氣象預報、即時天氣觀測、地震資訊與警報之 RESTful 介面。",
         "category": "Weather & Environment",
         "provider": "交通部中央氣象署",
         "provider_type": "official",
-        "docs_url": "https://opendata.cwa.gov.tw/opendatadoc/MFC/DYN-O-B.pdf",
+        "docs_url": "https://opendata.cwa.gov.tw/dist/opendata-swagger.html",
         "api_style": "REST",
         "auth_type": "api_key",
         "access_tier": "free",
         "https_support": "yes",
-        "cors_support": "unknown",
+        "cors_support": "yes",
         "license_name": "OGDL-Taiwan-1.0",
         "commercial_use": "allowed",
         "service_status": "active",
         "review_status": "verified",
         "verification_level": "docs_reviewed",
-        "last_verified_at": "2026-10-13",
+        "last_reviewed_at": "2026-10-13",
         "sources": [
             "https://opendata.cwa.gov.tw/"
         ]

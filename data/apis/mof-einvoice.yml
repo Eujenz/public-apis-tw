@@ -1,4 +1,4 @@
-id: "mof-einvoice"
+﻿id: "mof-einvoice"
 name_zh: "財政部電子發票整合服務平台 API"
 name_en: "MOF E-Invoice Open API"
 description_zh: "提供電子發票中獎號碼開獎結果、載具發票表頭/明細查詢、營業人統編字軌有效性及捐贈碼查驗。"
@@ -23,8 +23,8 @@ rate_limit: "需向財政部申請 AppID 與 API Key，不同端點依業務權�
 service_status: "active"
 review_status: "verified"
 verification_level: "docs_reviewed"
-last_verified_at: "2026-10-13"
+last_reviewed_at: "2026-10-13"
 sources:
   - "https://www.einvoice.nat.gov.tw/APCONSUMER/BTC501W/"
   - "https://data.gov.tw/dataset/25997"
-notes: "查詢開獎號碼與捐贈碼為公開服務，若需存取個人載具發票需消費者授權條碼與驗證碼。"
+notes: "查詢開獎號碼與捐贈碼為公開服務免資格限制；若需存取個人載具發票明細需取得消費者手機條碼與驗證碼，加值中心相關介接需營業人身分或向財政部專案申請審核。"

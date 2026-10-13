@@ -3,7 +3,7 @@
 build_catalog.py - 從 YAML 原始資料編譯產出目錄
 
 產出標的：
-1. docs/catalog.md: 依分類結構化整理之 Markdown 目錄，包含完整屬性與表格
+1. docs/catalog.md: 依使用領域分類結構化整理之 Markdown 目錄，包含完整屬性與表格
 2. dist/apis.json: 機器可讀之標準 JSON 陣列，依 id 穩定排序
 """
 
@@ -20,7 +20,7 @@ DIST_DIR = ROOT_DIR / "dist"
 DIST_JSON = DIST_DIR / "apis.json"
 
 CATEGORY_ORDER = [
-    ("Government", "政府與公共資訊"),
+    ("Government & Public Services", "政府與公共服務"),
     ("Finance & Business", "商業登記與金融財經"),
     ("Weather & Environment", "天氣與環境水情"),
     ("Transportation", "交通與運輸"),
@@ -44,18 +44,20 @@ def load_apis():
     return apis
 
 def generate_markdown(apis):
-    # 分類聚合
     by_category = defaultdict(list)
     verified_count = 0
     candidate_count = 0
+    needs_review_count = 0
 
     for api in apis:
-        if api.get("review_status") == "verified":
+        status = api.get("review_status")
+        if status == "verified":
             verified_count += 1
             by_category[api["category"]].append(api)
-        elif api.get("review_status") == "candidate":
+        elif status == "candidate":
             candidate_count += 1
-            # 候選項目不進入正式主表，獨立附註或於專用區塊標示
+        elif status == "needs_review":
+            needs_review_count += 1
 
     lines = []
     lines.append("# 台灣公共與開放 API 目錄 (Public APIs Taiwan Catalog)")
@@ -66,13 +68,16 @@ def generate_markdown(apis):
     lines.append("")
     lines.append(f"- **正式收錄 (Verified)**: {verified_count} 項")
     lines.append(f"- **候選項目 (Candidate)**: {candidate_count} 項")
+    if needs_review_count > 0:
+        lines.append(f"- **待重新覆核 (Needs Review)**: {needs_review_count} 項")
     lines.append(f"- **最後編譯時間**: 自動更新於每次建置")
     lines.append("")
     lines.append("## 分類快速導覽")
     lines.append("")
     for cat_en, cat_zh in CATEGORY_ORDER:
         cat_apis = by_category.get(cat_en, [])
-        lines.append(f"- [{cat_zh} ({cat_en})](#{cat_en.lower().replace('& ', '').replace(' ', '-')}) ({len(cat_apis)})")
+        anchor = cat_en.lower().replace("& ", "").replace(" ", "-")
+        lines.append(f"- [{cat_zh} ({cat_en})](#{anchor}) ({len(cat_apis)})")
     lines.append("")
     lines.append("---")
     lines.append("")
@@ -83,13 +88,13 @@ def generate_markdown(apis):
         lines.append(f"## {cat_zh} ({cat_en})")
         lines.append("")
         if not cat_apis:
-            lines.append("*目前此分類尚無已驗證項目。*")
+            lines.append("*目前此分類尚無已審核通過之項目。*")
             lines.append("")
             continue
 
         # 輸出 Markdown 表格
-        lines.append("| API 名稱 | 提供者 | 簡介 | 驗證機制 | 費用層級 | HTTPS | CORS | 授權條款 | 官方文件 | 查核等級 |")
-        lines.append("| :--- | :--- | :--- | :--- | :--- | :---: | :---: | :--- | :--- | :--- |")
+        lines.append("| API 名稱 | 提供者 | 簡介 | 類型 | 驗證機制 | 費用層級 | HTTPS | CORS | 上游授權 | 官方文件 | 查核等級 |")
+        lines.append("| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :--- | :---: |")
 
         for item in cat_apis:
             name_display = f"**{item['name_zh']}**"
@@ -97,6 +102,7 @@ def generate_markdown(apis):
                 name_display += f"<br>`{item['name_en']}`"
             provider = item["provider"]
             desc = item["description_zh"]
+            api_style = item.get("api_style", "REST")
             auth = item.get("auth_type", "unknown")
             tier = item.get("access_tier", "unknown")
             https = item.get("https_support", "unknown")
@@ -106,7 +112,7 @@ def generate_markdown(apis):
             vlevel = item.get("verification_level", "none")
 
             row = (
-                f"| {name_display} | {provider} | {desc} | `{auth}` | `{tier}` | `{https}` | `{cors}` | "
+                f"| {name_display} | {provider} | {desc} | `{api_style}` | `{auth}` | `{tier}` | `{https}` | `{cors}` | "
                 f"`{license_name}` | [文件連結]({docs_url}) | `{vlevel}` |"
             )
             lines.append(row)

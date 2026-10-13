@@ -1,4 +1,4 @@
-id: "nlsc-map-api"
+﻿id: "nlsc-map-api"
 name_zh: "國土測繪圖資服務雲 API"
 name_en: "NLSC Web Map & Coordinate API"
 description_zh: "提供台灣全島通用版電子地圖 (WMTS)、正射影像圖、地段代碼查詢、地籍圖層與坐標轉換服務。"
@@ -8,7 +8,7 @@ provider_type: "official"
 docs_url: "https://maps.nlsc.gov.tw/Opendata/"
 website_url: "https://maps.nlsc.gov.tw"
 base_url: "https://maps.nlsc.gov.tw/S_Maps"
-api_style: "REST"
+api_style: "OGC Web Services"
 data_formats:
   - "XML"
   - "JSON"
@@ -24,7 +24,7 @@ rate_limit: "免金鑰直接介接 WMTS 與地段地籍查詢服務，部分大�
 service_status: "active"
 review_status: "verified"
 verification_level: "docs_reviewed"
-last_verified_at: "2026-10-13"
+last_reviewed_at: "2026-10-13"
 sources:
   - "https://maps.nlsc.gov.tw/Opendata/"
   - "https://data.gov.tw/dataset/131012"

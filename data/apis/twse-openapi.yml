@@ -1,4 +1,4 @@
-id: "twse-openapi"
+﻿id: "twse-openapi"
 name_zh: "台灣證券交易所 OpenAPI"
 name_en: "Taiwan Stock Exchange (TWSE) OpenAPI"
 description_zh: "提供台灣集中交易市場每日收盤行情、個股本益比/殖利率、除權息公告、大盤指數與上市基本資訊之 OpenAPI 介面。"
@@ -23,7 +23,7 @@ rate_limit: "免金鑰直接呼叫，設有每分鐘請求上限以維護服務�
 service_status: "active"
 review_status: "verified"
 verification_level: "docs_reviewed"
-last_verified_at: "2026-10-13"
+last_reviewed_at: "2026-10-13"
 sources:
   - "https://openapi.twse.com.tw/"
   - "https://data.gov.tw/dataset/11549"
